@@ -1,5 +1,9 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect
 from django.template.response import TemplateResponse
+
+from karma.karma.forms import KarmaPointsForm
+from karma.karma.models import KarmaPoints
 
 
 def index(request):
@@ -10,5 +14,19 @@ def index(request):
                             )
 
 
+@login_required()
 def personal_page(request):
-    return TemplateResponse(request, 'karma/personal.html', {})
+    if request.POST:
+        form = KarmaPointsForm(request.POST)
+        if form.is_valid():
+            point = form.save(False)
+            point.user = request.user
+            point.save()
+            form = KarmaPointsForm()
+    else:
+        form = KarmaPointsForm()
+
+    return TemplateResponse(request, 'karma/personal.html', {
+        'form': form,
+        'points': KarmaPoints.objects.filter(user=request.user)
+    })

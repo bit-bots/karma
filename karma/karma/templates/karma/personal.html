@@ -5,5 +5,22 @@
 
 Personal Page
 
+    <div class="form-control">
+        <form action="{% url 'karma_personal' %}" method="post">
+            {% csrf_token %}
+            <input type="text" name="{{ form.description.name }}" value="{{ form.description.value|default_if_none:'' }}" placeholder="What have you done?" required="required" />
+            <input type="number" name="{{ form.points.name }}" value="{{ form.points.value }}" placeholder="Points" required="required" />
+            <input type="submit" name="submit" value="Submit" class="btn btn-default" />
+        </form>
+    </div>
 
+    <div>
+    <table>
+        {% for point in points %}
+            <tr>
+            <td>{{ point.points }}</td>
+            <td>{{ point.description }}</td>
+            </tr>
+    {% endfor %}
+    </table></div>
 {% endblock %}
