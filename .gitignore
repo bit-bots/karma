@@ -1,0 +1,6 @@
+.pyenv
+.idea
+.pyc
+db.sqlite3
+settings.py
+__pycache__
