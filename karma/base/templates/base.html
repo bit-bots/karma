@@ -1,12 +1,46 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Karma</title>
+    <title>{% block title %}{% endblock %} - Karma</title>
+    <link href="{% static 'css/bootstrap.css' %}" rel="stylesheet" type="text/css" media="screen"/>
+    <link href="{% static 'css/main.css' %}" rel="stylesheet" type="text/css" media="screen"/>
 </head>
 <body>
-<div class="content">
-    {% block content %}{% endblock %}
+<div id="wrap">
+        <nav role="navigation" class="main-menu navbar navbar-fixed-top navbar-default">
+            <div class="container">
+                <a href="{% url "index" %}" class="navbar-brand">Karma - Real Internet Points</a>
+            <div class="pull-right">
+                    {% if request.user.is_anonymous %}
+                        <a href="{% url 'login' %}"><i class="btn btn-primary">Login</i></a>
+                    {% else %}
+                        <a href=""><i class="fa fa-user"></i><span>{{ request.user.get_username }}</span></a>
+                    {% endif %}
+            </div></div>
+        </nav>
+
+<div id="content" class="container">
+        {% block content %}
+        {% endblock %}
 </div>
+
+    <footer>
+    <div class="navbar navbar-fixed-bottom navbar-default">
+        <div class="container"><a href="/about">About</a><span class="separator"></span><a href="link[1]"
+                                                                                           target="_blank">Imprint</a><span
+                class="separator"></span>Current timezone is Europe/Berlin.
+            {% if debug %}
+                <div class="pull-right alert-danger">
+                    <b>Warning!</b> {{ site_name }} is configured with <code>DEBUG = True</code>.
+                </div>
+            {% endif %}
+        </div>
+    </footer>
+</div>
+<script src="{% static 'js/lib/jquery.js' %}"  type="text/javascript" ></script>
+<script src="{% static 'js/lib/bootstrap.js' %}"  type="text/javascript" ></script>
 </body>
 </html>

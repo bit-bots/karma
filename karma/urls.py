@@ -15,8 +15,15 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
+from django.shortcuts import redirect
+from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^', include('karma.karma.urls'))
+    url(r'^karma/', include('karma.karma.urls')),
+    url(r'^$', lambda req: redirect('karma_index'), name='index'),
+    url(r'^login$', auth_views.login, name='login', ),
+    url(r'^logout$', auth_views.logout, {
+        'next_page': '/'
+    }, name='logout'),
 ]

@@ -1,7 +1,33 @@
 {% extends "base.html" %}
+{% load i18n %}
 
 {% block content %}
 
-    Hier kommt mal Inhalt!
+    {% blocktrans %}
+    <p class="alert-success alert">The Leading Platform for the <b><i>Real</i> Internet Points</b>. Get some here!</p>
+    {% endblocktrans %}
+<section class="section login">
+        <div class="container">
+            <div class="halfsize">
+                <form method="POST" action="{% url 'login' %}" class="form">
+                    <h1>Log in</h1>
+                    <div style="display:none;">
+                        {% csrf_token %}
+                    </div>
+                    <div class="form-group"><label for="username">Username</label><input class="form-control"
+                                                                                         id="username" name="username"
+                                                                                         type="text" value="">
+                    </div>
+                    <div class="form-group"><label for="password">Password</label><input class="form-control"
+                                                                                         id="password" name="password"
+                                                                                         type="password" value="">
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Login" class="pull-right btn btn-success"/>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
 
 {% endblock %}
