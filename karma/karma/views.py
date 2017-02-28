@@ -75,5 +75,6 @@ def project_overview(request, project_id):
         raise HttpResponseForbidden()
     return TemplateResponse(request, 'karma/project_overview.html', {
         'project': project,
+        'sum': KarmaPoints.objects.filter(project=project).aggregate(Sum('points'))['points__sum'],
         'points': KarmaPoints.objects.filter(project=project)
     })
