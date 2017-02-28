@@ -33,6 +33,7 @@ def personal_page(request):
         'form': form,
         'points': KarmaPoints.objects.filter(user=request.user).order_by('-time'),
         'sum': KarmaPoints.objects.filter(user=request.user).aggregate(Sum('points'))['points__sum'],
+        'projects': Project.objects.filter(Q(user=request.user) | Q(group__user=request.user)).distinct().order_by('name')
     })
 
 
@@ -62,5 +63,5 @@ def add_categories(request):
         form = KarmaCategoryForm()
     return TemplateResponse(request, 'karma/add_category.html', {
         'form': form,
-        'categories': Category.objects.filter(Q(project__user=request.user))
+        'categories': Category.objects.filter(Q(project__user=request.user)| Q(project__group__user=request.user)).distinct().order_by('name')
     })

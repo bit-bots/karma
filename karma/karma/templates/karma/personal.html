@@ -12,7 +12,14 @@ Personal Page
             {% if form.points.errors %}<ul class="alert alert-danger">{{ form.points.errors }}</ul>{% endif %}
             <input type="text" name="{{ form.description.name }}" value="{{ form.description.value|default_if_none:'' }}" placeholder="What have you done?" required="required" width="50em" />
             {% if form.description.errors %}<ul class="alert alert-danger">{{ form.description.errors }}</ul>{% endif %}
-            Project: {{ form.project }} Category: {{ form.category }}
+            <label>Project:</label>
+            <select name="{{ form.project.name }}" id="{{ form.project.id }}">
+                <option value="">--------</option>
+                {% for project in projects %}
+                    <option value="{{ project.pk }}">{{ project.name }}</option>
+                {% endfor %}
+            </select>
+            Category: {{ form.category }}
             <input type="submit" name="submit" value="Submit" class="btn btn-default" />
         </form>
     </div>
