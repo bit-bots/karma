@@ -2,7 +2,8 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import F
 from django.db.models import Q
 from django.db.models import Sum
-from django.shortcuts import redirect
+from django.http import HttpResponseForbidden
+from django.shortcuts import redirect, get_object_or_404
 from django.template.response import TemplateResponse
 
 from karma.karma.forms import KarmaPointsForm, KarmaProjectForm, KarmaCategoryForm
@@ -64,4 +65,15 @@ def add_categories(request):
     return TemplateResponse(request, 'karma/add_category.html', {
         'form': form,
         'categories': Category.objects.filter(Q(project__user=request.user)| Q(project__group__user=request.user)).distinct().order_by('name')
+    })
+
+
+@login_required()
+def project_overview(request, project_id):
+    project = get_object_or_404(Project, pk=project_id)
+    if not Project.objects.filter(pk=project_id).filter(Q(user=request.user) | Q(group__user=request.user)):
+        raise HttpResponseForbidden()
+    return TemplateResponse(request, 'karma/project_overview.html', {
+        'project': project,
+        'points': KarmaPoints.objects.filter(project=project)
     })

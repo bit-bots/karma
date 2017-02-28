@@ -3,45 +3,63 @@
 
 {% block content %}
 
-Personal Page
+    Personal Page
 
-    <div class="wrap">
+    <div class="wrap form-group">
         <form action="{% url 'karma_personal' %}" method="post">
             {% csrf_token %}
-            <input type="number" name="{{ form.points.name }}" value="{{ form.points.value }}" placeholder="Points" required="required" />
-            {% if form.points.errors %}<ul class="alert alert-danger">{{ form.points.errors }}</ul>{% endif %}
-            <input type="text" name="{{ form.description.name }}" value="{{ form.description.value|default_if_none:'' }}" placeholder="What have you done?" required="required" width="50em" />
-            {% if form.description.errors %}<ul class="alert alert-danger">{{ form.description.errors }}</ul>{% endif %}
+            <label for="id_points">Points: </label><input id="id_points" class="form-control" style="width: 7em"
+                                                          type="number" name="{{ form.points.name }}"
+                                                          value="{{ form.points.value }}" placeholder="Points"
+                                                          required="required"/>
+            {% if form.points.errors %}
+                <ul class="alert alert-danger">{{ form.points.errors }}</ul>
+            {% endif %}
+            <label for="id_desc">Description:</label>
+            <input class="form-control" id="id_desc" type="text" name="{{ form.description.name }}"
+                   value="{{ form.description.value|default_if_none:'' }}" placeholder="What have you done?"
+                   required="required" width="50em"/>
+            {% if form.description.errors %}
+                <ul class="alert alert-danger">{{ form.description.errors }}</ul>{% endif %}
             <label>Project:</label>
-            <select name="{{ form.project.name }}" id="{{ form.project.id }}">
+            <select class="form-control" name="{{ form.project.name }}" id="{{ form.project.id }}">
                 <option value="">--------</option>
                 {% for project in projects %}
                     <option value="{{ project.pk }}">{{ project.name }}</option>
                 {% endfor %}
             </select>
-            Category: {{ form.category }}
-            <input type="submit" name="submit" value="Submit" class="btn btn-default" />
+            <label for="id_category">Category:</label>{{ form.category }}
+            <input type="submit" name="submit" value="Submit" class="btn btn-default"/>
         </form>
     </div>
 
     <div>
-    <table>
-    <tr><th width="170em">Wann</th>
-        <th>Wieviel?</th>
-        <th>Was?</th></tr>
-    <tr><th>Summe:</th>
-    <th>{{ sum }}</th>
-    <th></th></tr>
-        {% for point in points %}
+        <table>
             <tr>
-            <td style="">{{ point.time }}</td>
-            <td>{{ point.points }}</td>
-            <td>{{ point.description }}</td>
+                <th width="170em">Wann</th>
+                <th>Wieviel?</th>
+                <th>Was?</th>
+                <th>Project</th>
+                <th>Category</th>
             </tr>
-    {% endfor %}
-    </table></div>
+            <tr>
+                <th>Summe:</th>
+                <th>{{ sum }}</th>
+                <th></th>
+            </tr>
+            {% for point in points %}
+                <tr>
+                    <td style="">{{ point.time }}</td>
+                    <td>{{ point.points }}</td>
+                    <td>{{ point.description }}</td>
+                    <td><a href="{% url 'karma_project_overview' point.project.pk %}">{{ point.project }}</a></td>
+                    <td><a href="">{{ point.category }}</a></td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
 
-    <a href="{% url 'karma_add_categories' %}">Add Categorie</a>
+    <a href="{% url 'karma_add_categories' %}">Add Categorie</a> -
     <a href="{% url 'karma_add_project' %}">Add Project</a>
 
 {% endblock %}

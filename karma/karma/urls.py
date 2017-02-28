@@ -6,4 +6,5 @@ urlpatterns = [
     url(r'^personal$', personal_page, name='karma_personal'),
     url(r'^add_project$', add_project, name='karma_add_project'),
     url(r'^add_categories$', add_categories, name='karma_add_categories'),
+    url(r'^project/([\d]+)$', project_overview, name='karma_project_overview'),
 ]

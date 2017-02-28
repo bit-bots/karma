@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+
+    <a href="{% url 'karma_add_project' %}">Add Project</a>
+
+    <h1>Overview for Project {{ project.name }}</h1>
+
+    <div>
+        <table>
+            <tr>
+                <th width="170em">Wann</th>
+                <th>Wieviel?</th>
+                <th>Wer?</th>
+                <th>Was?</th>
+                <th>Category</th>
+            </tr>
+            <tr>
+                <th>Summe:</th>
+                <th>{{ sum }}</th>
+                <th></th>
+            </tr>
+            {% for point in points %}
+                <tr>
+                    <td style="">{{ point.time }}</td>
+                    <td>{{ point.points }}</td>
+                    <td>{{ point.user.username }}</td>
+                    <td>{{ point.description }}</td>
+                    <td><a href="">{{ point.category }}</a></td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+{% endblock %}
