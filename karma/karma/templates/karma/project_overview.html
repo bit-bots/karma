@@ -25,7 +25,7 @@
                 <tr>
                     <td style="">{{ point.time }}</td>
                     <td>{{ point.points }}</td>
-                    <td><a href="{% url 'karma_project_user' project.pk user.username %}">{{ point.user.username }}</a></td>
+                    <td><a href="{% url 'karma_project_user' project.pk point.user.username %}">{{ point.user.username }}</a></td>
                     <td>{{ point.description }}</td>
                     <td><a href="">{{ point.category }}</a></td>
                 </tr>

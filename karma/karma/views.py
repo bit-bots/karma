@@ -80,6 +80,7 @@ def project_overview(request, project_id):
         'points': KarmaPoints.objects.filter(project=project)
     })
 
+
 @login_required()
 def project_user(request, project_id, user_login):
     project = get_object_or_404(Project, pk=project_id)
