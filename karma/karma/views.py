@@ -1,5 +1,5 @@
 from django.contrib.auth.decorators import login_required
-from django.db.models import F
+from django.contrib.auth.models import User
 from django.db.models import Q
 from django.db.models import Sum
 from django.http import HttpResponseForbidden
@@ -8,6 +8,7 @@ from django.template.response import TemplateResponse
 
 from karma.karma.forms import KarmaPointsForm, KarmaProjectForm, KarmaCategoryForm
 from karma.karma.models import KarmaPoints, Project, Category
+from django.conf import settings
 
 
 def index(request):
@@ -77,4 +78,17 @@ def project_overview(request, project_id):
         'project': project,
         'sum': KarmaPoints.objects.filter(project=project).aggregate(Sum('points'))['points__sum'],
         'points': KarmaPoints.objects.filter(project=project)
+    })
+
+@login_required()
+def project_user(request, project_id, user_login):
+    project = get_object_or_404(Project, pk=project_id)
+    user = get_object_or_404(User, username=user_login)
+    if not Project.objects.filter(pk=project_id).filter(Q(user=request.user) | Q(group__user=request.user)):
+        raise HttpResponseForbidden()
+    return TemplateResponse(request, 'karma/project_user.html', {
+        'project': project,
+        'user': user,
+        'sum': KarmaPoints.objects.filter(project=project, user=user).aggregate(Sum('points'))['points__sum'],
+        'points': KarmaPoints.objects.filter(project=project, user=user)
     })

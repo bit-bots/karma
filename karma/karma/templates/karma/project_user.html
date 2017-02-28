@@ -5,14 +5,13 @@
 
     <a href="{% url 'karma_add_project' %}">Add Project</a>
 
-    <h1>Overview for Project {{ project.name }}</h1>
+    <h1>Overview for User <b>{{ user.username }}</b> in Project <b>{{ project.name }}</b></h1>
 
     <div>
         <table>
             <tr>
                 <th width="170em">Wann</th>
                 <th>Wieviel?</th>
-                <th>Wer?</th>
                 <th>Was?</th>
                 <th>Category</th>
             </tr>
@@ -25,7 +24,6 @@
                 <tr>
                     <td style="">{{ point.time }}</td>
                     <td>{{ point.points }}</td>
-                    <td><a href="{% url 'karma_project_user' project.pk user.username %}">{{ point.user.username }}</a></td>
                     <td>{{ point.description }}</td>
                     <td><a href="">{{ point.category }}</a></td>
                 </tr>
