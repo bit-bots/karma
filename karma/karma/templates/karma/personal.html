@@ -5,24 +5,36 @@
 
 Personal Page
 
-    <div class="">
+    <div class="wrap">
         <form action="{% url 'karma_personal' %}" method="post">
             {% csrf_token %}
-            <input type="text" name="{{ form.description.name }}" value="{{ form.description.value|default_if_none:'' }}" placeholder="What have you done?" required="required" />
-            {% if form.description.errors %}<ul class="alert alert-danger">{{ form.description.errors }}</ul>{% endif %}
             <input type="number" name="{{ form.points.name }}" value="{{ form.points.value }}" placeholder="Points" required="required" />
             {% if form.points.errors %}<ul class="alert alert-danger">{{ form.points.errors }}</ul>{% endif %}
+            <input type="text" name="{{ form.description.name }}" value="{{ form.description.value|default_if_none:'' }}" placeholder="What have you done?" required="required" width="50em" />
+            {% if form.description.errors %}<ul class="alert alert-danger">{{ form.description.errors }}</ul>{% endif %}
+            Project: {{ form.project }} Category: {{ form.category }}
             <input type="submit" name="submit" value="Submit" class="btn btn-default" />
         </form>
     </div>
 
     <div>
     <table>
+    <tr><th width="170em">Wann</th>
+        <th>Wieviel?</th>
+        <th>Was?</th></tr>
+    <tr><th>Summe:</th>
+    <th>{{ sum }}</th>
+    <th></th></tr>
         {% for point in points %}
             <tr>
+            <td style="">{{ point.time }}</td>
             <td>{{ point.points }}</td>
             <td>{{ point.description }}</td>
             </tr>
     {% endfor %}
     </table></div>
+
+    <a href="{% url 'karma_add_categories' %}">Add Categorie</a>
+    <a href="{% url 'karma_add_project' %}">Add Project</a>
+
 {% endblock %}

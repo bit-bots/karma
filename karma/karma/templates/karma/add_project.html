@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+
+    <form action="{% url 'karma_add_project' %}" method="POST">
+    {% csrf_token %}
+        Name of Project: {{ form.name }}
+        Owner: {{ form.user }}
+        Group allowed to contribute: {{ form.group }}
+    <input type="submit" name="submit" value="Submit">
+    </form>
+
+
+    <table>
+    {% for project in projects %}
+        <tr>
+            <td>{{ project.name }}</td>
+        </tr>
+    {% endfor %}
+    </table>
+{% endblock %}

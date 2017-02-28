@@ -1,9 +1,12 @@
 from django.contrib.auth.decorators import login_required
+from django.db.models import F
+from django.db.models import Q
+from django.db.models import Sum
 from django.shortcuts import redirect
 from django.template.response import TemplateResponse
 
-from karma.karma.forms import KarmaPointsForm
-from karma.karma.models import KarmaPoints
+from karma.karma.forms import KarmaPointsForm, KarmaProjectForm, KarmaCategoryForm
+from karma.karma.models import KarmaPoints, Project, Category
 
 
 def index(request):
@@ -22,11 +25,42 @@ def personal_page(request):
             point = form.save(False)
             point.user = request.user
             point.save()
-            form = KarmaPointsForm()
+            redirect('karma_personal')
     else:
         form = KarmaPointsForm()
 
     return TemplateResponse(request, 'karma/personal.html', {
         'form': form,
-        'points': KarmaPoints.objects.filter(user=request.user)
+        'points': KarmaPoints.objects.filter(user=request.user).order_by('-time'),
+        'sum': KarmaPoints.objects.filter(user=request.user).aggregate(Sum('points'))['points__sum'],
+    })
+
+
+@login_required()
+def add_project(request):
+    if request.POST:
+        form = KarmaProjectForm(request.POST)
+        if form.is_valid():
+            form.save()
+            redirect('karma_add_project')
+    else:
+        form = KarmaProjectForm()
+    return TemplateResponse(request, 'karma/add_project.html', {
+        'form': form,
+        'projects': Project.objects.filter(Q(user=request.user) | Q(group__user=request.user)).distinct().order_by('name')
+    })
+
+
+@login_required()
+def add_categories(request):
+    if request.POST:
+        form = KarmaCategoryForm(request.POST)
+        if form.is_valid():
+            form.save()
+            redirect('karma_add_categories')
+    else:
+        form = KarmaCategoryForm()
+    return TemplateResponse(request, 'karma/add_category.html', {
+        'form': form,
+        'categories': Category.objects.filter(Q(project__user=request.user))
     })

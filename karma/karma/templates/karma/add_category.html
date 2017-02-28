@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+
+    <form action="{% url 'karma_add_categories' %}" method="POST">
+    {% csrf_token %}
+        Name of Category: {{ form.name }}
+        In Project: {{ form.project }}
+
+    <input type="submit" name="submit" value="Submit">
+    </form>
+
+
+    <table>
+    {% for cat in categories %}
+        <tr>
+            <td>{{ cat.name }}</td>
+        </tr>
+    {% endfor %}
+    </table>
+{% endblock %}
