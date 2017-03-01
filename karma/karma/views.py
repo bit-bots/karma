@@ -27,7 +27,7 @@ def personal_page(request):
             point = form.save(False)
             point.user = request.user
             point.save()
-            redirect('karma_personal')
+            return redirect('karma_personal')
     else:
         form = KarmaPointsForm()
 
@@ -45,7 +45,7 @@ def add_project(request):
         form = KarmaProjectForm(request.POST)
         if form.is_valid():
             form.save()
-            redirect('karma_add_project')
+            return redirect('karma_add_project')
     else:
         form = KarmaProjectForm()
     return TemplateResponse(request, 'karma/add_project.html', {
@@ -60,7 +60,7 @@ def add_categories(request):
         form = KarmaCategoryForm(request.POST)
         if form.is_valid():
             form.save()
-            redirect('karma_add_categories')
+            return redirect('karma_add_categories')
     else:
         form = KarmaCategoryForm()
     return TemplateResponse(request, 'karma/add_category.html', {
