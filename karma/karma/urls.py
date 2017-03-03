@@ -7,5 +7,6 @@ urlpatterns = [
     url(r'^add_project$', add_project, name='karma_add_project'),
     url(r'^add_categories$', add_categories, name='karma_add_categories'),
     url(r'^project/([\d]+)$', project_overview, name='karma_project_overview'),
+    url(r'^project_highscore/([\d]+)$', project_highscore, name='karma_project_highscore'),
     url(r'^project/([\d]+)/([a-zA-Z0-9]+)$', project_user, name='karma_project_user'),
 ]

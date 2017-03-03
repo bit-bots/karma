@@ -93,3 +93,22 @@ def project_user(request, project_id, user_login):
         'sum': KarmaPoints.objects.filter(project=project, user=user).aggregate(Sum('points'))['points__sum'],
         'points': KarmaPoints.objects.filter(project=project, user=user)
     })
+
+
+@login_required()
+def project_highscore(request, project_id):
+    project = get_object_or_404(Project, pk=project_id)
+    if not Project.objects.filter(pk=project_id).filter(Q(user=request.user) | Q(group__user=request.user)):
+        raise HttpResponseForbidden()
+
+    userpoints = KarmaPoints.objects.\
+        filter(project=project).\
+        values('user__username').\
+        annotate(points=Sum('points')).\
+        order_by('-points')
+    print(userpoints)
+
+    return TemplateResponse(request, 'karma/project_highscore.html', {
+        'project': project,
+        'users': userpoints,
+    })
