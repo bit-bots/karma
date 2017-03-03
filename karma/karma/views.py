@@ -5,6 +5,8 @@ from django.db.models import Sum
 from django.http import HttpResponseForbidden
 from django.shortcuts import redirect, get_object_or_404
 from django.template.response import TemplateResponse
+from datetime import timedelta
+from django.utils.timezone import now
 
 from karma.karma.forms import KarmaPointsForm, KarmaProjectForm, KarmaCategoryForm
 from karma.karma.models import KarmaPoints, Project, Category
@@ -96,19 +98,20 @@ def project_user(request, project_id, user_login):
 
 
 @login_required()
-def project_highscore(request, project_id):
+def project_highscore(request, project_id, nr_days):
     project = get_object_or_404(Project, pk=project_id)
     if not Project.objects.filter(pk=project_id).filter(Q(user=request.user) | Q(group__user=request.user)):
         raise HttpResponseForbidden()
 
     userpoints = KarmaPoints.objects.\
-        filter(project=project).\
+        filter(project=project, time__gte=now()-timedelta(days=int(nr_days))).\
         values('user__username').\
         annotate(points=Sum('points')).\
         order_by('-points')
     print(userpoints)
 
     return TemplateResponse(request, 'karma/project_highscore.html', {
+        'days': nr_days,
         'project': project,
         'users': userpoints,
     })
