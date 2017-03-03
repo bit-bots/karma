@@ -108,7 +108,6 @@ def project_highscore(request, project_id, nr_days):
         values('user__username').\
         annotate(points=Sum('points')).\
         order_by('-points')
-    print(userpoints)
 
     return TemplateResponse(request, 'karma/project_highscore.html', {
         'days': nr_days,
