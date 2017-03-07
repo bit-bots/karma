@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+
+    <a href="{% url 'karma_add_project' %}">Add Project</a>
+
+    <h1>Highscore for Project {{ project.name }} ({{ days }} days)</h1>
+
+    <div>
+        <table>
+            {% for user in users %}
+                <tr>
+                    <td>{{ user.user__username }}</td>
+                    <td>{{ user.points }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+{% endblock %}
