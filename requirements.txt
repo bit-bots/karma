@@ -1,2 +1,3 @@
 Django
 django-widget-tweaks
+django-datetime-widget

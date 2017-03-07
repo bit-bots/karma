@@ -22,7 +22,7 @@ class Category(models.Model):
 
 class KarmaPoints(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
-    time = models.DateTimeField(auto_now_add=True)
+    time = models.DateTimeField()
     points = models.PositiveIntegerField()
     description = models.CharField(max_length=200)
     project = models.ForeignKey(Project)
