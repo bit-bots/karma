@@ -114,3 +114,13 @@ def project_highscore(request, project_id, nr_days):
         'project': project,
         'users': userpoints,
     })
+
+
+def api_project_user_count(request, project_id, nr_days):
+    project = get_object_or_404(Project, pk=project_id)
+
+    usercount = KarmaPoints.objects.\
+        filter(project=project, time__gte=now()-timedelta(days=int(nr_days))).values('user').distinct().count()
+    return TemplateResponse(request, 'karma/api_project_active', {
+        'count': usercount,
+    })
