@@ -124,3 +124,23 @@ def api_project_user_count(request, project_id, nr_days):
     return TemplateResponse(request, 'karma/api_project_active', {
         'count': usercount,
     })
+
+
+@login_required()
+def points_edit(request, point_id):
+    point_object = get_object_or_404(KarmaPoints, pk=point_id, user=request.user)
+    if request.POST:
+        form = KarmaPointsForm(request.POST, instance=point_object)
+        if form.is_valid():
+            form.save()
+            return redirect('karma_personal')
+    else:
+        form = KarmaPointsForm(instance=point_object)
+
+    return TemplateResponse(request, 'karma/personal.html', {
+        'edit': point_id,
+        'form': form,
+        'points': KarmaPoints.objects.filter(user=request.user).order_by('-time'),
+        'sum': KarmaPoints.objects.filter(user=request.user).aggregate(Sum('points'))['points__sum'],
+        'projects': Project.objects.filter(Q(user=request.user) | Q(group__user=request.user)).distinct().order_by('name')
+    })
