@@ -126,6 +126,41 @@ def api_project_user_count(request, project_id, nr_days):
     })
 
 
+def api_project_activity_points(request, project_id):
+    project = get_object_or_404(Project, pk=project_id)
+
+    userpoints_long = KarmaPoints.objects.\
+        filter(project=project, time__gte=now()-timedelta(days=7)).\
+        values('user__username').\
+        annotate(points=Sum('points'))
+
+    activepoints = 0
+
+    for userp in userpoints_long:
+        p = userp["points"]
+        if p > 420:
+            activepoints += 1000
+        elif p > 120:
+            activepoints += 700
+        elif p > 60:
+            activepoints += 600
+        else:
+            activepoints += 300
+
+    userpoints_24 = KarmaPoints.objects.\
+        filter(project=project, time__gte=now()-timedelta(days=1)).\
+        values('user__username').\
+        annotate(points=Sum('points'))
+
+    for userp in userpoints_24:
+        p = userp["points"]
+        activepoints += p * 2
+
+    return TemplateResponse(request, 'karma/api_project_active', {
+        'count': activepoints,
+    })
+
+
 @login_required()
 def points_edit(request, point_id):
     point_object = get_object_or_404(KarmaPoints, pk=point_id, user=request.user)
