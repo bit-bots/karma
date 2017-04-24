@@ -79,7 +79,7 @@ def project_overview(request, project_id):
     return TemplateResponse(request, 'karma/project_overview.html', {
         'project': project,
         'sum': KarmaPoints.objects.filter(project=project).aggregate(Sum('points'))['points__sum'],
-        'points': KarmaPoints.objects.filter(project=project)
+        'points': KarmaPoints.objects.filter(project=project).order_by('-time')
     })
 
 
