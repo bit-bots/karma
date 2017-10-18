@@ -9,7 +9,12 @@
 
 {% block content %}
 
-    Personal Page {% if edit %}<a href="{% url "karma_personal" %}">New entry</a>{% endif %}
+    {% if edit %}
+        <h1>Edit Entry</h1>
+        <a href="{% url "karma_personal" %}">New entry</a>
+    {% else %}
+        <h1>Personal Page</h1>
+    {% endif %}
 
     <div class="wrap form-group">
         <form action="{% if edit %}{% url 'edit_points' edit %}{% else %}{% url 'karma_personal' %}{% endif %}" method="post">

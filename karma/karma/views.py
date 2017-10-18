@@ -93,7 +93,7 @@ def project_user(request, project_id, user_login):
         'project': project,
         'user': user,
         'sum': KarmaPoints.objects.filter(project=project, user=user).aggregate(Sum('points'))['points__sum'],
-        'points': KarmaPoints.objects.filter(project=project, user=user)
+        'points': KarmaPoints.objects.filter(project=project, user=user).order_by('-time')
     })
 
 
@@ -102,6 +102,9 @@ def project_highscore(request, project_id, nr_days):
     project = get_object_or_404(Project, pk=project_id)
     if not Project.objects.filter(pk=project_id).filter(Q(user=request.user) | Q(group__user=request.user)):
         raise HttpResponseForbidden()
+
+    if nr_days > 100000:
+        nr_days = 100000
 
     userpoints = KarmaPoints.objects.\
         filter(project=project, time__gte=now()-timedelta(days=int(nr_days))).\
