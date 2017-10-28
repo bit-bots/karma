@@ -32,7 +32,7 @@
                    required="required" width="50em"/>
             {% if form.description.errors %}
                 <ul class="alert alert-danger">{{ form.description.errors }}</ul>{% endif %}
-            <label>Project:</label>
+            <label>Project:</label>  <a href="{% url 'karma_add_project' %}">Add Project</a>
             <select class="form-control" name="{{ form.project.name }}" id="{{ form.project.id }}">
                 <option value="">--------</option>
                 {% for project in projects %}
