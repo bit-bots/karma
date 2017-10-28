@@ -103,8 +103,8 @@ def project_highscore(request, project_id, nr_days):
     if not Project.objects.filter(pk=project_id).filter(Q(user=request.user) | Q(group__user=request.user)):
         raise HttpResponseForbidden()
 
-    if nr_days > 100000:
-        nr_days = 100000
+    if int(nr_days) > 100000:
+        nr_days = '100000'
 
     userpoints = KarmaPoints.objects.\
         filter(project=project, time__gte=now()-timedelta(days=int(nr_days))).\
