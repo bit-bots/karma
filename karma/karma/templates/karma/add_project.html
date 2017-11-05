@@ -3,15 +3,19 @@
 
 {% block content %}
 
+    <h3>Create a new project:</h3>
     <form action="{% url 'karma_add_project' %}" method="POST">
-    {% csrf_token %}
-        Name of Project: {{ form.name }}
-        Owner: {{ form.user }}
-        Group allowed to contribute: {{ form.group }}
-    <input type="submit" name="submit" value="Submit">
+        {% csrf_token %}
+        Name of Project: {{ form.name }} <br>
+        Owner: {{ form.user }} <br>
+        Group allowed to contribute: {{ form.group }} <br>
+        Karma rules: <br>
+        {{ form.karma_rules }} <br>
+        <input type="submit" name="submit" value="Submit">
     </form>
 
 
+    <h3>Your Projects:</h3>
     <table>
     {% for project in projects %}
         <tr>

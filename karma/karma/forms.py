@@ -15,7 +15,7 @@ class KarmaPointsForm(ModelForm):
 class KarmaProjectForm(ModelForm):
     class Meta:
         model = Project
-        fields = ['name', 'user', 'group']
+        fields = ['name', 'user', 'group', 'karma_rules']
 
 
 class KarmaCategoryForm(ModelForm):

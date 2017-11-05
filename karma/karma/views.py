@@ -182,3 +182,10 @@ def points_edit(request, point_id):
         'sum': KarmaPoints.objects.filter(user=request.user).aggregate(Sum('points'))['points__sum'],
         'projects': Project.objects.filter(Q(user=request.user) | Q(group__user=request.user)).distinct().order_by('name')
     })
+
+
+@login_required()
+def karma_rules(request):
+    return TemplateResponse(request, 'karma/rules.html', {
+        'projects': Project.objects.filter(Q(user=request.user) | Q(group__user=request.user)).distinct().order_by('name'),
+    })

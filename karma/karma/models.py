@@ -7,6 +7,7 @@ class Project(models.Model):
     name = models.CharField(max_length=50)
     group = models.ForeignKey(Group, on_delete=models.CASCADE, blank=True, null=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, blank=True, null=True)
+    karma_rules = models.TextField(max_length=400, default='No special rules')
 
     def __str__(self):
         return self.name

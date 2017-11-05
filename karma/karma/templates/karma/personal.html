@@ -19,7 +19,7 @@
     <div class="wrap form-group">
         <form action="{% if edit %}{% url 'edit_points' edit %}{% else %}{% url 'karma_personal' %}{% endif %}" method="post">
             {% csrf_token %}
-            <label for="id_points">Points: </label><input id="id_points" class="form-control" style="width: 7em"
+            <label for="id_points">Points (refer to the <a href="{% url 'karma_rules' %}" target="_blank">rules of the project</a>) : </label><input id="id_points" class="form-control" style="width: 7em"
                                                           type="number" name="{{ form.points.name }}"
                                                           value="{{ form.points.value }}" placeholder="Points"
                                                           required="required"/>

@@ -11,5 +11,6 @@ urlpatterns = [
     url(r'^project/([\d]+)/([a-zA-Z0-9]+)$', project_user, name='karma_project_user'),
     url(r'^api/project/([\d]+)/active_count/days/([a-zA-Z0-9]+)$', api_project_user_count, name='karma_api_project_user_count'),
     url(r'^api/project/([\d]+)/active_points/$', api_project_activity_points, name='karma_api_project_activity_count'),
-    url(r'^personal/edit/(\d+)/$', points_edit, name="edit_points")
+    url(r'^personal/edit/(\d+)/$', points_edit, name="edit_points"),
+    url(r'^project/rules/$', karma_rules, name="karma_rules"),
 ]
