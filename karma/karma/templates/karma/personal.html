@@ -67,8 +67,8 @@
                     <td>{{ point.points }}</td>
                     <td>{{ point.description }}</td>
                     <td><a href="{% url 'karma_project_overview' point.project.pk %}">{{ point.project }}</a></td>
-                    <td><a href="">{{ point.category }}</a></td>
-                    <td><a href="{% url "edit_points" point.pk %}" class="btn btn-default"><i class="fa fa-pencil"></i> </a> </td>
+                    <td><a href="{% url 'karma_category_overview' point.category.pk %}">{{ point.category }}</a></td>
+                    <td><a href="{% url 'edit_points' point.pk %}" class="btn btn-default"><i class="fa fa-pencil"></i> </a> </td>
                 </tr>
             {% endfor %}
         </table>

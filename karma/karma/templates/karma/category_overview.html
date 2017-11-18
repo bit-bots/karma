@@ -3,9 +3,9 @@
 
 {% block content %}
 
-    <a href="{% url 'karma_add_project' %}">Add Project</a> | <a href="{% url 'karma_project_highscore' project.pk 45 %}">Highscore</a>
+    <a href="{% url 'karma_add_project' %}">Add Project</a> | <a href="{% url 'karma_project_highscore' 1 45 %}">Highscore</a>
 
-    <h1>Overview for Project {{ project.name }}</h1>
+    <h1>Overview for Category {{ category.name }}</h1>
 
     <div>
         <table>
@@ -14,7 +14,7 @@
                 <th>Wieviel?</th>
                 <th>Wer?</th>
                 <th>Was?</th>
-                <th>Category</th>
+                <th>Projekt</th>
             </tr>
             <tr>
                 <th>Summe:</th>
@@ -25,9 +25,9 @@
                 <tr>
                     <td style="">{{ point.time }}</td>
                     <td>{{ point.points }}</td>
-                    <td><a href="{% url 'karma_project_user' project.pk point.user.username %}">{{ point.user.username }}</a></td>
+                    <td>{{ point.user.username }}</td>
                     <td>{{ point.description }}</td>
-                    <td><a href="{% url 'karma_category_overview' point.category.pk %}">{{ point.category }}</a></td>
+                    <td><a href="{% url 'karma_project_overview' point.project.pk %}">{{ point.project }}</a></td>
                 </tr>
             {% endfor %}
         </table>

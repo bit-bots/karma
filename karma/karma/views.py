@@ -26,7 +26,7 @@ def personal_page(request):
     if request.POST:
         form = KarmaPointsForm(request.POST)
         if form.is_valid():
-            point = form.save(False)
+            point = form.save(commit=False)
             point.user = request.user
             point.save()
             return redirect('karma_personal')
@@ -80,6 +80,15 @@ def project_overview(request, project_id):
         'project': project,
         'sum': KarmaPoints.objects.filter(project=project).aggregate(Sum('points'))['points__sum'],
         'points': KarmaPoints.objects.filter(project=project).order_by('-time')
+    })
+
+@login_required()
+def category_overview(request, category_id):
+    category = get_object_or_404(Category, pk=category_id)
+    return TemplateResponse(request, 'karma/category_overview.html', {
+        'category': category,
+        'sum': KarmaPoints.objects.filter(category=category).aggregate(Sum('points'))['points__sum'],
+        'points': KarmaPoints.objects.filter(category=category).order_by('-time')
     })
 
 
