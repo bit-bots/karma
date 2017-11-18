@@ -1,6 +1,11 @@
 {% extends "base.html" %}
 {% load i18n %}
 
+{% block title %}
+Highscore {{ project.name }}
+{% endblock %}
+
+
 {% block content %}
 
     <a href="{% url 'karma_add_project' %}">Add Project</a>

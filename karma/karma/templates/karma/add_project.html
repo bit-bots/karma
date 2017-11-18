@@ -1,6 +1,10 @@
 {% extends "base.html" %}
 {% load i18n %}
 
+{% block title %}
+Add Project
+{% endblock %}
+
 {% block content %}
 
     <h3>Create a new project:</h3>
@@ -19,7 +23,7 @@
     <table>
     {% for project in projects %}
         <tr>
-            <td>{{ project.name }}</td>
+            <td><a href="{% url 'karma_project_overview' project.pk %}">{{ project.name }}</a></td>
         </tr>
     {% endfor %}
     </table>

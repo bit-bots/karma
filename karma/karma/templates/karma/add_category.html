@@ -1,6 +1,10 @@
 {% extends "base.html" %}
 {% load i18n %}
 
+{% block title %}
+Add Category
+{% endblock %}
+
 {% block content %}
 
     <form action="{% url 'karma_add_categories' %}" method="POST">
@@ -13,9 +17,10 @@
 
 
     <table>
+        <th>Bestehende Kategorien:</th>
     {% for cat in categories %}
         <tr>
-            <td>{{ cat.name }}</td>
+            <td><a href="{% url 'karma_category_overview' cat.pk %}">{{ cat.name }}</a></td>
         </tr>
     {% endfor %}
     </table>
