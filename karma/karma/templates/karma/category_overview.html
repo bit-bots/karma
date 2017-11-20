@@ -7,7 +7,7 @@
 
 {% block content %}
 
-    <a href="{% url 'karma_add_project' %}">Add Project</a> | <a href="{% url 'karma_project_highscore' 1 45 %}">Highscore</a>
+    <a href="{% url 'karma_add_project' %}">Add Project</a> | <a href="{% url 'karma_project_highscore' category.project.pk 45 %}">Highscore</a>
 
     <h1>Overview for Category {{ category.name }}</h1>
 
