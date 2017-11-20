@@ -17,6 +17,9 @@ Personal Page
 
 {% block content %}
 
+    My projects: {% for project in projects %}<a href="{% url 'karma_project_overview' project.pk %}">{{ project.name }}</a> (<a href="{% url 'karma_project_highscore' project.pk 45 %}">Highscore</a>)&emsp;{% endfor %}
+
+
     {% if edit %}
         <h1>Edit Entry</h1>
         <a href="{% url "karma_personal" %}">New entry</a>
