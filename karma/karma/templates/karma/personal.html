@@ -37,7 +37,8 @@
             </select>
             <label for="id_category">Category:</label>{% render_field form.category class+="form-control"%}
         <br />
-            <label for="datetime">Date:</label>{% render_field form.time class+="form-control" id="datetimepicker" %}
+            <label for="datetime">Date:</label><br>
+            {% render_field form.time class+="form-control" id="datetimepicker" %}
         <br />
             <input type="submit" name="submit" value="{% if edit %}Edit{% else %}Submit{% endif %}" class="btn btn-default"/>
         </form>
