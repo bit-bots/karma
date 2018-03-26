@@ -21,9 +21,9 @@ class Category(models.Model):
 
 
 class KarmaPoints(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, blank=True, null=True)
     time = models.DateTimeField()
     points = models.PositiveIntegerField()
     description = models.CharField(max_length=200)
-    project = models.ForeignKey(Project)
-    category = models.ForeignKey(Category)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)

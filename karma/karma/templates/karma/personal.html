@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load i18n %}
+{% load widget_tweaks %}
 
 {% block head %}}
 {{ block.super }}
@@ -34,9 +35,9 @@
                     <option {% if form.project.value == project.pk %}selected{% endif %} value="{{ project.pk }}">{{ project.name }}</option>
                 {% endfor %}
             </select>
-            <label for="id_category">Category:</label>{{ form.category }}
+            <label for="id_category">Category:</label>{% render_field form.category class+="form-control"%}
         <br />
-            <label for="datetime">Date:</label>{{ form.time }}
+            <label for="datetime">Date:</label>{% render_field form.time class+="form-control" id="datetimepicker" %}
         <br />
             <input type="submit" name="submit" value="{% if edit %}Edit{% else %}Submit{% endif %}" class="btn btn-default"/>
         </form>
