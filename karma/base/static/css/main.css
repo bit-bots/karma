@@ -1,3 +1,20 @@
 #wrap > .container {
     padding-top: 60px;
+    padding-bottom: 35px;
+}
+
+.main-menu .pull-right {
+    padding: 15px 0;
+}
+
+.main-menu .fa-user {
+    padding: 3px;
+}
+
+footer > .navbar {
+    min-height: 30px;
+}
+
+footer .container {
+    padding-top: 5px;
 }

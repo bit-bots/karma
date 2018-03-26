@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}
+Karma Rules
+{% endblock %}
+
+
+{% block content %}
+
+    <h1>Karma Rules</h1>
+
+    <div>
+        {% for project in projects %}
+            <h3>{{ project.name }}</h3>
+            {{ project.karma_rules }}
+        {% endfor %}
+
+    </div>
+
+{% endblock %}

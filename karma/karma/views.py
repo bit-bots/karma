@@ -26,7 +26,7 @@ def personal_page(request):
     if request.POST:
         form = KarmaPointsForm(request.POST)
         if form.is_valid():
-            point = form.save(False)
+            point = form.save(commit=False)
             point.user = request.user
             point.save()
             return redirect('karma_personal')
@@ -79,7 +79,16 @@ def project_overview(request, project_id):
     return TemplateResponse(request, 'karma/project_overview.html', {
         'project': project,
         'sum': KarmaPoints.objects.filter(project=project).aggregate(Sum('points'))['points__sum'],
-        'points': KarmaPoints.objects.filter(project=project)
+        'points': KarmaPoints.objects.filter(project=project).order_by('-time')
+    })
+
+@login_required()
+def category_overview(request, category_id):
+    category = get_object_or_404(Category, pk=category_id)
+    return TemplateResponse(request, 'karma/category_overview.html', {
+        'category': category,
+        'sum': KarmaPoints.objects.filter(category=category).aggregate(Sum('points'))['points__sum'],
+        'points': KarmaPoints.objects.filter(category=category).order_by('-time')
     })
 
 
@@ -93,7 +102,7 @@ def project_user(request, project_id, user_login):
         'project': project,
         'user': user,
         'sum': KarmaPoints.objects.filter(project=project, user=user).aggregate(Sum('points'))['points__sum'],
-        'points': KarmaPoints.objects.filter(project=project, user=user)
+        'points': KarmaPoints.objects.filter(project=project, user=user).order_by('-time')
     })
 
 
@@ -102,6 +111,9 @@ def project_highscore(request, project_id, nr_days):
     project = get_object_or_404(Project, pk=project_id)
     if not Project.objects.filter(pk=project_id).filter(Q(user=request.user) | Q(group__user=request.user)):
         raise HttpResponseForbidden()
+
+    if int(nr_days) > 100000:
+        nr_days = '100000'
 
     userpoints = KarmaPoints.objects.\
         filter(project=project, time__gte=now()-timedelta(days=int(nr_days))).\
@@ -126,6 +138,41 @@ def api_project_user_count(request, project_id, nr_days):
     })
 
 
+def api_project_activity_points(request, project_id):
+    project = get_object_or_404(Project, pk=project_id)
+
+    userpoints_long = KarmaPoints.objects.\
+        filter(project=project, time__gte=now()-timedelta(days=7)).\
+        values('user__username').\
+        annotate(points=Sum('points'))
+
+    activepoints = 0
+
+    for userp in userpoints_long:
+        p = userp["points"]
+        if p > 420:
+            activepoints += 1000
+        elif p > 120:
+            activepoints += 700
+        elif p > 60:
+            activepoints += 600
+        else:
+            activepoints += 300
+
+    userpoints_24 = KarmaPoints.objects.\
+        filter(project=project, time__gte=now()-timedelta(days=1)).\
+        values('user__username').\
+        annotate(points=Sum('points'))
+
+    for userp in userpoints_24:
+        p = userp["points"]
+        activepoints += p * 2
+
+    return TemplateResponse(request, 'karma/api_project_active', {
+        'count': activepoints,
+    })
+
+
 @login_required()
 def points_edit(request, point_id):
     point_object = get_object_or_404(KarmaPoints, pk=point_id, user=request.user)
@@ -143,4 +190,11 @@ def points_edit(request, point_id):
         'points': KarmaPoints.objects.filter(user=request.user).order_by('-time'),
         'sum': KarmaPoints.objects.filter(user=request.user).aggregate(Sum('points'))['points__sum'],
         'projects': Project.objects.filter(Q(user=request.user) | Q(group__user=request.user)).distinct().order_by('name')
+    })
+
+
+@login_required()
+def karma_rules(request):
+    return TemplateResponse(request, 'karma/rules.html', {
+        'projects': Project.objects.filter(Q(user=request.user) | Q(group__user=request.user)).distinct().order_by('name'),
     })

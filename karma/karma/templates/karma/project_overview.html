@@ -1,6 +1,11 @@
 {% extends "base.html" %}
 {% load i18n %}
 
+{% block title %}
+{{ project.name }}
+{% endblock %}
+
+
 {% block content %}
 
     <a href="{% url 'karma_add_project' %}">Add Project</a> | <a href="{% url 'karma_project_highscore' project.pk 45 %}">Highscore</a>
@@ -27,7 +32,7 @@
                     <td>{{ point.points }}</td>
                     <td><a href="{% url 'karma_project_user' project.pk point.user.username %}">{{ point.user.username }}</a></td>
                     <td>{{ point.description }}</td>
-                    <td><a href="">{{ point.category }}</a></td>
+                    <td><a href="{% url 'karma_category_overview' point.category.pk %}">{{ point.category }}</a></td>
                 </tr>
             {% endfor %}
         </table>
