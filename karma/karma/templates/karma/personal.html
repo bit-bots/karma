@@ -34,7 +34,7 @@ Personal Page
             <label for="id_points">Points (refer to the <a href="{% url 'karma_rules' %}" target="_blank">rules of the project</a>) : </label><input id="id_points" class="form-control" style="width: 7em"
                                                           type="number" name="{{ form.points.name }}"
                                                           value="{{ form.points.value }}" placeholder="Points"
-                                                          required="required"/>
+                                                          required="required" autofocus="autofocus"/>
             {% if form.points.errors %}
                 <ul class="alert alert-danger">{{ form.points.errors }}</ul>
             {% endif %}
