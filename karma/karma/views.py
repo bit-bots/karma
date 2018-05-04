@@ -151,13 +151,13 @@ def api_project_activity_points(request, project_id):
     for userp in userpoints_long:
         p = userp["points"]
         if p > 420:
-            activepoints += 1000
-        elif p > 120:
             activepoints += 700
+        elif p > 120:
+            activepoints += 500
         elif p > 60:
-            activepoints += 600
+            activepoints += 400
         else:
-            activepoints += 300
+            activepoints += 200
 
     userpoints_24 = KarmaPoints.objects.\
         filter(project=project, time__gte=now()-timedelta(days=1)).\
