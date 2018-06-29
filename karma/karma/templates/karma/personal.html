@@ -44,14 +44,21 @@ Personal Page
                    required="required" width="50em"/>
             {% if form.description.errors %}
                 <ul class="alert alert-danger">{{ form.description.errors }}</ul>{% endif %}
-            <label>Project:</label>  <a href="{% url 'karma_add_project' %}">Add Project</a>
+            <label for=":id_project">Project:</label>  <a href="{% url 'karma_add_project' %}">Add Project</a>
             <select class="form-control" name="{{ form.project.name }}" id="{{ form.project.id }}">
                 <option value="">--------</option>
                 {% for project in projects %}
                     <option {% if form.project.value == project.pk %}selected{% endif %} value="{{ project.pk }}">{{ project.name }}</option>
                 {% endfor %}
             </select>
-            <label for="id_category">Category:</label>{% render_field form.category class+="form-control"%}
+            <br />
+            <label for=":id_category">Category:</label>  <a href="{% url 'karma_add_categories' %}">Add Category</a>
+            <select class="form-control" name="{{ form.category.name }}" id="{{ form.category.id }}">
+                <option value="test">--------</option>
+                {% for category in categories %}
+                    <option {% if form.category.value == category.pk %}selected{% endif %} value="{{ category.pk }}">{{ category.name }}</option>
+                {% endfor %}
+            </select>
         <br />
             <label for="datetime">Date:</label><br>
             {% render_field form.time class+="form-control" id="datetimepicker" %}
