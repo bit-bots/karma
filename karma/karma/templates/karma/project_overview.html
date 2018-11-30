@@ -36,6 +36,25 @@
                 </tr>
             {% endfor %}
         </table>
+        <div class="pagination">
+            <span class="step-links">
+                <div class="btn-group" role="group" aria-label="btn-group">
+                    {% if points.has_previous %}
+                        <a class="btn btn-default" href="?page=1">&laquo; first</a>
+                        <a class="btn btn-default" href="?page={{ points.previous_page_number }}">previous</a>
+                    {% endif %}
+                    {% if points.has_other_pages %}
+                        <span class="current btn btn-default">
+                            Page {{ points.number }} of {{ points.paginator.num_pages }}
+                        </span>
+                    {% endif %}
+                    {% if points.has_next %}
+                        <a class="btn btn-default" href="?page={{ points.next_page_number }}">next</a>
+                        <a class="btn btn-default" href="?page={{ points.paginator.num_pages }}">last &raquo;</a>
+                    {% endif %}
+                </div>
+            </span>
+        </div>
     </div>
 
 {% endblock %}
