@@ -7,6 +7,7 @@ from django.shortcuts import redirect, get_object_or_404
 from django.template.response import TemplateResponse
 from datetime import timedelta
 from django.utils.timezone import now
+from django.core.paginator import Paginator
 
 from karma.karma.forms import KarmaPointsForm, KarmaProjectForm, KarmaCategoryForm
 from karma.karma.models import KarmaPoints, Project, Category
@@ -81,10 +82,17 @@ def project_overview(request, project_id):
     project = get_object_or_404(Project, pk=project_id)
     if not Project.objects.filter(pk=project_id).filter(Q(user=request.user) | Q(group__user=request.user)):
         raise HttpResponseForbidden()
+
+    items = KarmaPoints.objects.filter(project=project).order_by('-time')
+
+    page = request.GET.get('page')
+    paginator = Paginator(items, settings.ITEMS_PER_PAGE)
+    displayedItems = paginator.get_page(page)
+
     return TemplateResponse(request, 'karma/project_overview.html', {
         'project': project,
         'sum': KarmaPoints.objects.filter(project=project).aggregate(Sum('points'))['points__sum'],
-        'points': KarmaPoints.objects.filter(project=project).order_by('-time')
+        'points': displayedItems
     })
 
 @login_required()
