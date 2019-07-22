@@ -6,6 +6,7 @@ from django.http import HttpResponseForbidden
 from django.shortcuts import redirect, get_object_or_404
 from django.template.response import TemplateResponse
 from datetime import timedelta
+import math
 from django.utils.timezone import now
 from django.core.paginator import Paginator
 
@@ -154,33 +155,37 @@ def api_project_user_count(request, project_id, nr_days):
 def api_project_activity_points(request, project_id):
     project = get_object_or_404(Project, pk=project_id)
 
-    userpoints_long = KarmaPoints.objects.\
+    userpoints_week = KarmaPoints.objects.\
         filter(project=project, time__gte=now()-timedelta(days=7)).\
         values('user__username').\
         annotate(points=Sum('points'))
-
-    activepoints = 0
-
-    for userp in userpoints_long:
-        p = userp["points"]
-        if p > 420:
-            activepoints += 700
-        elif p > 120:
-            activepoints += 500
-        elif p > 60:
-            activepoints += 400
-        else:
-            activepoints += 200
-
-    userpoints_24 = KarmaPoints.objects.\
+    userpoints_day = KarmaPoints.objects.\
         filter(project=project, time__gte=now()-timedelta(days=1)).\
         values('user__username').\
         annotate(points=Sum('points'))
 
-    for userp in userpoints_24:
-        p = userp["points"]
-        activepoints += p * 2
+    activepoints_list = dict()
 
+    # Add week points and points of last day to weight the last day more
+    for userp in userpoints_week:
+        username = userp["user__username"]
+        activepoints_list[username] = userp["points"]
+
+    for userp in userpoints_day:
+        username = userp["user__username"]
+        activepoints_list[username] += userp["points"]
+
+    activepoints = 0
+    for username, points in activepoints_list.items():
+        # Take logarithm of karma points to count more karma less
+        log_points = math.log(points)
+        # Take square root to weight persons stronger than points
+        activepoints += math.sqrt(log_points)
+
+    # Scale
+    activepoints *= 200
+    # Return integer
+    activepoints = int(activepoints)
     return TemplateResponse(request, 'karma/api_project_active', {
         'count': activepoints,
     })
