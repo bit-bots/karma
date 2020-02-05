@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "4fbe62e16c972d45e0f50c18aaf3cfd82a0e2406ad785b4f656b08f29520734f"
+            "sha256": "076c5f8cc5a7b1e4ebd820f5d14ba28c340585ad549fb2a7f9528c9e866be67f"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -31,6 +31,13 @@
             "index": "pypi",
             "version": "==3.0.3"
         },
+        "django-datetime-widget": {
+            "hashes": [
+                "sha256:bd727b466b7f4bbc23f3a9ec571ef1e2e9977ef1b83a296eb7b796580a168ced"
+            ],
+            "index": "pypi",
+            "version": "==0.9.3"
+        },
         "django-widget-tweaks": {
             "hashes": [
                 "sha256:65c960f3d75008a285e4b10f4d21f9eae4160fd77a0f6097ad545185f8648bd6",
@@ -38,6 +45,14 @@
             ],
             "index": "pypi",
             "version": "==1.4.5"
+        },
+        "djangorestframework": {
+            "hashes": [
+                "sha256:05809fc66e1c997fd9a32ea5730d9f4ba28b109b9da71fccfa5ff241201fd0a4",
+                "sha256:e782087823c47a26826ee5b6fa0c542968219263fb3976ec3c31edab23a4001f"
+            ],
+            "index": "pypi",
+            "version": "==3.11.0"
         },
         "pytz": {
             "hashes": [

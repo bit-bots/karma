@@ -6,6 +6,8 @@ name = "pypi"
 [packages]
 Django = "<3.1"
 django-widget-tweaks = "<1.5"
+django-datetime-widget = "<0.10"
+djangorestframework = "<3.12"
 
 [dev-packages]
 

@@ -17,11 +17,13 @@ from django.conf.urls import url, include
 from django.contrib import admin
 from django.shortcuts import redirect
 from django.contrib.auth import views as auth_views
+from django.urls import path
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^karma/', include('karma.karma.urls')),
     url(r'^$', lambda req: redirect('karma_index'), name='index'),
+    path('api/', include('karma.api.urls')),
     url(r'^login/$', auth_views.LoginView.as_view(), name='login', ),
     url(r'^logout/$', auth_views.LogoutView.as_view(), {
         'next_page': '/'

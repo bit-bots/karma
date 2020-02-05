@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'datetimewidget',
     'karma.karma',
     'karma.base',
+    'karma.api',
 ]
 
 MIDDLEWARE = [
