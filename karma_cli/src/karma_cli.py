@@ -49,12 +49,14 @@ parser_get.add_argument("-d", "--days", nargs="?", default="", dest="days", help
 
 parser_login = subparsers.add_parser("login",
                                      help="login to your account and create a token for authentication, do this first")
-parser_config = subparsers.add_parser("config", help="configure defaults")
-parser_config.add_argument("-p", "--project", nargs="?", default="", dest="project", help="set the default project",
-                           required=False)
-parser_config.add_argument("-c", "--category", nargs="?", default="", dest="category", help="set the default category",
-                           required=False)
 
+parser_config = subparsers.add_parser("config", help="configure defaults")
+parser_config.add_argument("-p", "--project", default=False, action="store_true", help="set the default project",
+                           required=False)
+parser_config.add_argument("-c", "--category", default=False, action="store_true", help="set the default category",
+                           required=False)
+parser_config.add_argument("-d", "--delete", default=False, action="store_true",
+                           help="delete default category and project", required=False)
 args = parser.parse_args()
 
 base_url = "https://karma.bit-bots.de/api/"
@@ -219,13 +221,26 @@ elif args.command == "get":
                         headers={'token': config['token']}, params={"project": project})
     """
 elif args.command == "config":
+    if args.delete:
+        try:
+            del config['default_project']
+            print(f"{COLORS.BOLD}{COLORS.OKGREEN}Deleted default project settings.{COLORS.ENDC}")
+        except KeyError:
+            print("No default project setting found")
+        try:
+            del config['default_category']
+            print(f"{COLORS.BOLD}{COLORS.OKGREEN}Deleted default project settings.{COLORS.ENDC}")
+        except KeyError:
+            print("No default category setting found")
+        write_config()
+        exit(0)
     projects_and_categories = get_available_projects_and_categories()
-    if args.project != "":
+    if args.project:
         projects = list(projects_and_categories.keys())
         config["default_project"] = check_projects_or_categories(args.project, projects, "project",
                                                                  check_default=False)
-        if args.category != "":
+        if args.category:
             categories = projects_and_categories[config["default_project"]]
             config["default_category"] = check_projects_or_categories(args.category, categories, "category",
-                                                                  check_default=False)
+                                                                      check_default=False)
     write_config()
