@@ -57,6 +57,8 @@ parser_config.add_argument("-c", "--category", nargs="?", default="", dest="cate
 
 args = parser.parse_args()
 
+base_url = "https://karma.bit-bots.de/api/"
+
 config_dir = os.getenv("XDG_CONFIG_HOME", os.path.expanduser("~/.config"))
 config_path = os.path.join(config_dir, "karma")
 config = {}
@@ -138,32 +140,52 @@ def get_time():
     return date_time_obj
 
 
-def get_available_projects():
-    # TODO get this from api
-    return ["Robocup-AG", "OE"]
+def get_available_projects_and_categories():
+    resp = requests.get(base_url + "projects/",
+                        headers={'Authorization': f"Token {config['token']}"})
+    if resp.status_code == 200:
+        d = resp.json()
+        return {project['name']: project['categories'] for project in d}
+    else:
+        print_error("Failed to get projects for user")
 
 
-def get_available_categories():
-    # TODO get this from api
-    return ["Hardware", "Software", "Organisatorisches"]
+def pretty_print_POST(req):
+    """
+    At this point it is completely built and ready
+    to be fired; it is "prepared".
+
+    However pay attention at the formatting used in
+    this function because it is programmed to be pretty
+    printed and may differ from the actual request.
+    """
+    print('{}\n{}\r\n{}\r\n\r\n{}'.format(
+        '-----------START-----------',
+        req.method + ' ' + req.url,
+        '\r\n'.join('{}: {}'.format(k, v) for k, v in req.headers.items()),
+        req.body,
+    ))
 
 
 if args.command == "login":
     user = input("Enter Username: ")
     password = getpass.unix_getpass("Enter Password: ")
-    resp = requests.post("https://karma.bit-bots.de/api/auth/", data={"username": user, "password": password})
+    resp = requests.post(base_url + "auth/", data={"username": user, "password": password})
     if resp.status_code == 200:
         config['token'] = resp.json()['token']
         write_config()
         print(f"{COLORS.BOLD}{COLORS.OKGREEN}Login Successful{COLORS.ENDC}")
     else:
-        print("Login not successful:")
-        print(resp.status_code)
-        print(resp.text)
+        print_error("Login not successful:")
+        print_error(f"Server returned {resp.status_code}")
+        print(COLORS.FAIL + resp.text + COLORS.ENDC)
 
 elif args.command == "add":
-    project = check_projects_or_categories(args.project, get_available_projects(), "project")
-    category = check_projects_or_categories(args.category, get_available_categories(), "category")
+    projects_and_categories = get_available_projects_and_categories()
+    projects = list(projects_and_categories.keys())
+    project = check_projects_or_categories(args.project, projects, "project")
+    categories = projects_and_categories[project]
+    category = check_projects_or_categories(args.category, categories, "category")
     time = get_time()
     if args.description == "":
         description = input("Enter a description of what you have done: ")
@@ -174,18 +196,20 @@ elif args.command == "add":
                 f" Karma: {args.points} || Description: {description} {COLORS.BOLD} {COLORS.OKBLUE}[Y/n] {COLORS.ENDC}")
     if yes == "" or yes == "y" or yes == "Y":
 
-        resp = requests.post("https://karma.bit-bots.de/api/karma/",
-                             headers={'Authorization': f"Token: {config['token']}"},
-                             json={"project": project, "category": category, "time": time.isoformat(),
+        resp = requests.post(base_url + "karma/",
+                             headers={'Authorization': f"Token {config['token']}"},
+                             data={"project": project, "category": category, "time": time.isoformat(),
                                    "description": description, "points": args.points})
         if resp.status_code == 201:
-            print("yaaaay")
+            print(f"{COLORS.OKGREEN}{COLORS.BOLD} Karma has been added successfully{COLORS.ENDC}")
         else:
-            print("naayyy")
-            print(resp.status_code)
+            print_error("Failed to add karma")
+            print_error(f"Server returned {resp.status_code}")
     else:
-        print("aborting")
+        print_error("Aborted adding karma")
 elif args.command == "get":
+    print_error("not implemented yet :D")
+    """
     project = check_projects_or_categories(args.project, get_available_projects(), "project")
     if args.category != "":
         category = check_projects_or_categories(args.category, get_available_categories(), "category")
@@ -193,11 +217,15 @@ elif args.command == "get":
         category = ""
     resp = requests.get("https://karma.bit-bots.de/api/karma/",
                         headers={'token': config['token']}, params={"project": project})
+    """
 elif args.command == "config":
+    projects_and_categories = get_available_projects_and_categories()
     if args.project != "":
-        config["default_project"] = check_projects_or_categories(args.project, get_available_projects(), "project",
+        projects = list(projects_and_categories.keys())
+        config["default_project"] = check_projects_or_categories(args.project, projects, "project",
                                                                  check_default=False)
-    if args.category != "":
-        config["default_category"] = check_projects_or_categories(args.category, get_available_categories(), "category",
+        if args.category != "":
+            categories = projects_and_categories[config["default_project"]]
+            config["default_category"] = check_projects_or_categories(args.category, categories, "category",
                                                                   check_default=False)
     write_config()
