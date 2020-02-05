@@ -1,4 +1,5 @@
 from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import QuerySet
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
@@ -15,7 +16,6 @@ class KarmaSerializer(serializers.ModelSerializer):
     category = serializers.CharField(source='category.name')
 
     def validate(self, attrs):
-        print(attrs)
         try:
             attrs['project'] = Project.objects.get(name=attrs['project']['name'])
         except ObjectDoesNotExist:
@@ -44,3 +44,12 @@ class ProjectSerializer(serializers.ModelSerializer):
         fields = ('name', 'categories')
 
     categories = CategoryField(many=True, read_only=True)
+
+
+class HighscoreSerializer(serializers.Serializer):
+    def to_representation(self, instance: QuerySet):
+        return instance.values_list('user__username', 'points')
+
+    def validate(self, attrs):
+        print(attrs)
+        return attrs
