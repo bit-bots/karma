@@ -26,7 +26,22 @@ class KarmaSerializer(serializers.ModelSerializer):
             raise ValidationError('Category does not exist')
         attrs['user'] = self.context['request'].user
         user_is_owner = attrs['user'] == attrs['project'].user
-        user_in_project_group = attrs['project'].group is not None and attrs['user'].groups.filter(name=attrs['project'].group.name).exists()
+        user_in_project_group = attrs['project'].group is not None and attrs['user'].groups.filter(
+            name=attrs['project'].group.name).exists()
         if not (user_is_owner or user_in_project_group):
             raise ValidationError('Project does not exist')
         return attrs
+
+
+class CategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = ('name',)
+
+
+class ProjectSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Project
+        fields = ('name', 'categories')
+
+    categories = CategorySerializer(many=True)

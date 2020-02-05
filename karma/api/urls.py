@@ -8,6 +8,7 @@ app_name = 'api'
 
 router = DefaultRouter()
 router.register(r'karma', views.KarmaViewSet, basename='karma')
+router.register(r'projects', views.ProjectViewSet, basename='projects')
 urlpatterns = router.urls
 
 urlpatterns += [

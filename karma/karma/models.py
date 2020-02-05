@@ -17,7 +17,7 @@ class Category(models.Model):
     class Meta:
         unique_together = ['name', 'project']
     name = models.CharField(max_length=50)
-    project = models.ForeignKey(Project, on_delete=models.CASCADE)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='categories')
 
     def __str__(self):
         return self.name
