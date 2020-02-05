@@ -33,10 +33,9 @@ class KarmaSerializer(serializers.ModelSerializer):
         return attrs
 
 
-class CategorySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Category
-        fields = ('name',)
+class CategoryField(serializers.RelatedField):
+    def to_representation(self, value):
+        return value.name
 
 
 class ProjectSerializer(serializers.ModelSerializer):
@@ -44,4 +43,4 @@ class ProjectSerializer(serializers.ModelSerializer):
         model = Project
         fields = ('name', 'categories')
 
-    categories = CategorySerializer(many=True)
+    categories = CategoryField(many=True, read_only=True)
