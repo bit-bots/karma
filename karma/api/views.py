@@ -15,7 +15,9 @@ class KarmaViewSet(viewsets.GenericViewSet,
                    mixins.CreateModelMixin,
                    mixins.ListModelMixin):
     serializer_class = KarmaSerializer
-    queryset = KarmaPoints.objects.all()
+
+    def get_queryset(self):
+        return KarmaPoints.objects.filter(Q(project__user=self.request.user) | Q(project__group__in=self.request.user.groups.all()))
 
 
 class ProjectViewSet(viewsets.GenericViewSet,
