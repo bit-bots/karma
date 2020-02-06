@@ -6,7 +6,6 @@ import yaml
 import getpass
 import os
 import requests
-import json
 
 
 class COLORS:
@@ -57,6 +56,11 @@ parser_config.add_argument("-c", "--category", default=False, action="store_true
                            required=False)
 parser_config.add_argument("-d", "--delete", default=False, action="store_true",
                            help="delete default category and project", required=False)
+
+parser_hs = subparsers.add_parser("highscore", help="get the highscore")
+parser_hs.add_argument("days", type=int, help="days of the highscore")
+parser_hs.add_argument("-p", "--project", nargs="?", default="", dest="project", help="which project's karma score",
+                       required=False)
 args = parser.parse_args()
 
 base_url = "https://karma.bit-bots.de/api/"
@@ -152,23 +156,6 @@ def get_available_projects_and_categories():
         print_error("Failed to get projects for user")
 
 
-def pretty_print_POST(req):
-    """
-    At this point it is completely built and ready
-    to be fired; it is "prepared".
-
-    However pay attention at the formatting used in
-    this function because it is programmed to be pretty
-    printed and may differ from the actual request.
-    """
-    print('{}\n{}\r\n{}\r\n\r\n{}'.format(
-        '-----------START-----------',
-        req.method + ' ' + req.url,
-        '\r\n'.join('{}: {}'.format(k, v) for k, v in req.headers.items()),
-        req.body,
-    ))
-
-
 if args.command == "login":
     user = input("Enter Username: ")
     password = getpass.unix_getpass("Enter Password: ")
@@ -203,7 +190,7 @@ elif args.command == "add":
                              data={"project": project, "category": category, "time": time.isoformat(),
                                    "description": description, "points": args.points})
         if resp.status_code == 201:
-            print(f"{COLORS.OKGREEN}{COLORS.BOLD} Karma has been added successfully{COLORS.ENDC}")
+            print(f"{COLORS.OKGREEN}{COLORS.BOLD}Karma has been added successfully{COLORS.ENDC}")
         else:
             print_error("Failed to add karma")
             print_error(f"Server returned {resp.status_code}")
@@ -211,7 +198,7 @@ elif args.command == "add":
         print_error("Aborted adding karma")
 elif args.command == "get":
     print_error("not implemented yet :D")
-    """
+    """resp.json()
     project = check_projects_or_categories(args.project, get_available_projects(), "project")
     if args.category != "":
         category = check_projects_or_categories(args.category, get_available_categories(), "category")
@@ -244,3 +231,14 @@ elif args.command == "config":
             config["default_category"] = check_projects_or_categories(args.category, categories, "category",
                                                                       check_default=False)
     write_config()
+elif args.command == "highscore":
+    projects_and_categories = get_available_projects_and_categories()
+    projects = list(projects_and_categories.keys())
+    project = check_projects_or_categories(args.project, projects, "project")
+    resp = requests.get(base_url + "highscore/",
+                        headers={'Authorization': f"Token {config['token']}"},
+                        params={"project": project, "days": args.days})
+    resp_dict = resp.json()
+    karma_sorted = [(k, resp_dict[k]) for k in sorted(resp_dict, key=resp_dict.get, reverse=True)]
+    for item in karma_sorted:
+        print(f"{item[0]}: \t {item[1]}")
