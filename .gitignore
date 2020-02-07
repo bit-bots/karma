@@ -4,3 +4,10 @@
 db.sqlite3
 settings.py
 __pycache__
+
+# built arch package files
+karma_cli/karma
+karma_cli/pkg
+karma_cli/src/karma
+*.pkg.tar.xz
+

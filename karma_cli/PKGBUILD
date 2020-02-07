@@ -1,0 +1,28 @@
+# Maintainer: ftsell <aur@finn-thorben.me>
+pkgname=bitbots-karma-cli-git
+pkgver=r67.2a00d7b
+pkgrel=1
+_gitname=karma
+_gitbranch=master
+pkgdesc="Bit-Bots Karma command line interface"
+arch=(any)
+url="https://github.com/bit-bots/${_gitname}"
+license=("MIT")
+makedepends=("git")
+depends=("python" "python-yaml" "python-requests")
+source=("${_gitname}::git+https://github.com/bit-bots/${_gitname}.git#branch=${_gitbranch}")
+sha256sums=("SKIP")
+
+pkgver() {
+	cd "$srcdir/${_gitname}"
+	printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+}
+
+
+package() {
+  cd "${srcdir}/${_gitname}"
+  install -D karma_cli/src/karma_cli.py ${pkgdir}/usr/bin/karma
+}
+
+
+
