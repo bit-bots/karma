@@ -17,8 +17,9 @@ def calibration(request):
     if request.method == 'POST':
         form = CalibrationForm(request.POST)
         if form.is_valid():
-            form.user = request.user
-            form.save()
+            c = form.save(commit=False)
+            c.user = request.user
+            c.save()
             messages.success(request, 'Calibration submitted successfully')
         else:
             raise HttpResponseBadRequest()
