@@ -29,8 +29,12 @@
                     {% endif %}
             </div></div>
         </nav>
-
 <div id="content" class="container">
+    <div class="container-fluid">
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    </div>
         {% block content %}
         {% endblock %}
 </div>

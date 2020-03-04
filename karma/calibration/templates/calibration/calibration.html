@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+{% block title %}
+Vote
+{% endblock %}
+{% block head %}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% endblock %}
+{% block content %}
+    <section class="section">
+        <div class="container">
+            <h1>Calibration</h1>
+            <p>To calibrate the Karmaleiste™, calibrations are needed to link karma points to activity in
+                percent.</p>
+            <div class="col-md-6 col-sm-12">
+                <h2>The week <small>{{ start_day|date:"d.m.y" }} &ndash; {{ end_day|date:"d.m.y" }}</small></h2>
+                <h4 class="well-sm">{{ week_entries }} {% if week_entries == 1 %}entry{% else %}entries{% endif %} by {{ week_persons }}
+                    {% if week_persons == 1 %}person{% else %}persons{% endif %}: {{ week_sum }} {% if day_sum == 1 %}
+                        point{% else %}points{% endif %}</h4>
+                <ul>
+                    {% for point in week_points %}
+                        <li>{{ point.user__username }}: {{ point.points }}</li>
+                        {% empty %}
+                        <li>No points in this week</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="col-md-6 col-sm-12">
+                <h2>Current day <small>{{ end_day|date:"d.m.y" }}</small></h2>
+                <h4 class="well-sm">{{ day_entries }} {% if day_entries == 1 %}entry{% else %}entries{% endif %} by {{ day_persons }}
+                    {% if day_persons %}person{% else %}persons{% endif %}: {{ day_sum }} {% if day_sum == 1 %}
+                        point{% else %}points{% endif %}</h4>
+                <ul>
+                    {% for point in day_points %}
+                        <li>{{ point.user__username }}: {{ point.points }}</li>
+                        {% empty %}
+                        <li>No points this day</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        <form method="POST" action="{% url 'calibration:calibration' %}" class="form col-md-6 col-sm-12"
+              style="margin-top:20px">
+            <div style="display: none">{% csrf_token %}</div>
+            {{ form.start_day|attr:"type:hidden" }}
+            {{ form.end_day|attr:"type:hidden" }}
+            <div class="form-group">
+                <div class="input-group">
+                    <span class="input-group-addon">Activity</span>
+                    {{ form.percent|attr:"min:0"|attr:"max:100"|add_class:"form-control" }}
+                    <span class="input-group-addon">%</span>
+                </div>
+            </div>
+            <button type="submit" class="form-control btn btn-primary">Submit</button>
+        </form>
+    </section>
+{% endblock %}

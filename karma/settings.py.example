@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'karma.karma',
     'karma.base',
     'karma.api',
+    'karma.calibration',
 ]
 
 MIDDLEWARE = [
