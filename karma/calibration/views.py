@@ -29,7 +29,7 @@ def calibration(request):
     end = start + timedelta(days=7)
     project = Project.objects.get(id=1)
     week_entries = KarmaPoints.objects. \
-        filter(project=project, time__gte=start, time__lte=end)
+        filter(project=project, time__gte=start, time__lte=end + timedelta(days=1))
     week_points = week_entries. \
         values('user__username'). \
         annotate(points=Sum('points')).order_by('-points')
