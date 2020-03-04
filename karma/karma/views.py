@@ -15,12 +15,9 @@ from karma.karma.models import KarmaPoints, Project, Category
 from django.conf import settings
 
 
+@login_required
 def index(request):
-    if request.user.is_authenticated:
-        return redirect('karma_personal')
-    return TemplateResponse(request, 'karma/index.html',
-                            {}
-                            )
+    return redirect('karma_personal')
 
 
 @login_required()
