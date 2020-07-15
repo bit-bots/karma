@@ -62,6 +62,11 @@ parser_hs.add_argument("days", type=int, help="days of the highscore")
 parser_hs.add_argument("-p", "--project", nargs="?", default="", dest="project", help="which project's karma score",
                        required=False)
 args = parser.parse_args()
+if not args.command:
+    # Highscore of 14 days (used for weekly) is default action
+    args.command = "highscore"
+    args.days = 14
+    args.project = ''
 
 base_url = "https://karma.bit-bots.de/api/"
 
