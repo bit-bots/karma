@@ -240,5 +240,5 @@ elif args.command == "highscore":
                         params={"project": project, "days": args.days})
     resp_dict = resp.json()
     karma_sorted = [(k, resp_dict[k]) for k in sorted(resp_dict, key=resp_dict.get, reverse=True)]
-    for item in karma_sorted:
-        print(f"{item[0]}: \t {item[1]}")
+    for name, value in karma_sorted:
+        print("* " + name + " " * (15 - len(name) - len(str(value))) + str(value))
