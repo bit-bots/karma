@@ -62,7 +62,7 @@ def calibration(request):
 @login_required
 def calibration_data(request):
     data = Calibration.objects.all()
-    csv = ['points_sum,user_count,mean,median,stddev,calibration']
+    csv = ['week_points_sum,week_user_count,week_mean,week_median,week_stddev,day_points_sum,day_user_count,day_mean,day_median,day_stddev,calibration']
     for entry in data:
         start = entry.start_day
         end = entry.end_day
@@ -74,16 +74,36 @@ def calibration_data(request):
             annotate(points=Sum('points')).order_by('-points')
         week_points = [e['points'] for e in week_points]
         week_persons = len(week_points)
-        percentage = entry.percent / 100
         if week_points:
-            mean = statistics.mean(week_points)
-            median = statistics.median(week_points)
-            points = sum(week_points)
+            wmean = statistics.mean(week_points)
+            wmedian = statistics.median(week_points)
+            wpoints = sum(week_points)
         else:
-            mean = median = points = 0
+            wmean = wmedian = wpoints = 0
         if len(week_points) > 1:
-            stdev = statistics.stdev(week_points)
+            wstdev = statistics.stdev(week_points)
         else:
-            stdev = 0
-        csv.append(','.join([str(x) for x in [points, week_persons, mean, median, stdev, percentage]]))
+            wstdev = 0
+
+        day_entries = KarmaPoints.objects. \
+            filter(project=project, time__day=end.day, time__month=end.month, time__year=end.year)
+        day_points = day_entries. \
+            values('user__username'). \
+            annotate(points=Sum('points')). \
+            order_by('-points')
+        day_points = [e['points'] for e in day_points]
+        day_persons = len(day_points)
+        if day_points:
+            dmean = statistics.mean(day_points)
+            dmedian = statistics.median(day_points)
+            dpoints = sum(day_points)
+        else:
+            dmean = dmedian = dpoints = 0
+        if len(day_points) > 1:
+            dstdev = statistics.stdev(day_points)
+        else:
+            dstdev = 0
+
+        percentage = entry.percent / 100
+        csv.append(','.join([str(x) for x in [wpoints, week_persons, wmean, wmedian, wstdev, dpoints, day_persons, dmean, dmedian, dstdev, percentage]]))
     return HttpResponse('\n'.join(csv), content_type='text/csv')
