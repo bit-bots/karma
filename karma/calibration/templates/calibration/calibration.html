@@ -11,7 +11,7 @@ Vote
         <div class="container">
             <h1>Calibration</h1>
             <p>To calibrate the Karmaleiste™, calibrations are needed to link karma points to activity in
-                percent.</p>
+                percent. <a href="{% url 'calibration:calibration_data' %}">Download data</a></p>
             <div class="col-md-6 col-sm-12">
                 <h2>The week <small>{{ start_day|date:"d.m.y" }} &ndash; {{ end_day|date:"d.m.y" }}</small></h2>
                 <h4 class="well-sm">{{ week_entries }} {% if week_entries == 1 %}entry{% else %}entries{% endif %} by {{ week_persons }}
