@@ -187,7 +187,7 @@ elif args.command == "add":
         description = args.description
 
     yes = input(f"Project: {project} || Category: {category} || Datetime: {time.strftime('%y-%m-%d %H:%M')} || "
-                f" Karma: {args.points} || Description: {description} {COLORS.BOLD} {COLORS.OKBLUE}[Y/n] {COLORS.ENDC}")
+                f"Karma: {args.points} || Description: {description} {COLORS.BOLD} {COLORS.OKBLUE}[Y/n] {COLORS.ENDC}")
     if yes == "" or yes == "y" or yes == "Y":
 
         resp = requests.post(base_url + "karma/",
