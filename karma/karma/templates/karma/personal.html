@@ -7,6 +7,13 @@
 
     {{ form.media }}
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="text/javascript">
+    var categories = [
+        {% for category in categories %}
+            { text: "{{ category.name }}", value: {{ category.pk }}, project: {{ category.project.pk }} },
+        {% endfor %}
+    ];
+    </script>
 {% endblock %}
 
 {% block title %}
@@ -46,7 +53,7 @@ Personal Page
             {% if form.description.errors %}
                 <ul class="alert alert-danger">{{ form.description.errors }}</ul>{% endif %}
             <label for=":id_project">Project:</label>  <a href="{% url 'karma_add_project' %}">Add Project</a>
-            <select class="form-control" name="{{ form.project.name }}" id="{{ form.project.id }}">
+            <select class="form-control" name="{{ form.project.name }}" id="project_selector">
                 <option value="">--------</option>
                 {% for project in projects %}
                     <option {% if form.project.value == project.pk %}selected{% endif %} value="{{ project.pk }}">{{ project.name }}</option>
@@ -54,11 +61,8 @@ Personal Page
             </select>
             <br />
             <label for=":id_category">Category:</label>  <a href="{% url 'karma_add_categories' %}">Add Category</a>
-            <select class="form-control" name="{{ form.category.name }}" id="{{ form.category.id }}">
-                <option value="test">--------</option>
-                {% for category in categories %}
-                    <option {% if form.category.value == category.pk %}selected{% endif %} value="{{ category.pk }}">{{ category.name }}</option>
-                {% endfor %}
+            <select class="form-control" name="{{ form.category.name }}" id="category_selector">
+                <option value="">--------</option>
             </select>
         <br />
             <label for="datetime">Date:</label><br>
