@@ -63,6 +63,9 @@ Personal Page
             <label for=":id_category">Category:</label>  <a href="{% url 'karma_add_categories' %}">Add Category</a>
             <select class="form-control" name="{{ form.category.name }}" id="category_selector">
                 <option value="">--------</option>
+                {% for category in categories %}
+                    <option {% if form.category.value == category.pk %}selected{% endif %} value="{{ category.pk }}">{{ category.name }}</option>
+                {% endfor %}
             </select>
         <br />
             <label for="datetime">Date:</label><br>
