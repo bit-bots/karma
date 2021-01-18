@@ -32,8 +32,10 @@ class KarmaViewSet(viewsets.GenericViewSet,
     def by_day(self, request):
         """Group information by day and user"""
         queryset = self.get_queryset()
-        points = queryset.annotate(date=TruncDate('time'), username=F('user__username')).values('username', 'date').order_by('date').annotate(Sum('points'))
-        return Response(points)
+        if queryset:
+            points = queryset.annotate(date=TruncDate('time'), username=F('user__username')).values('username', 'date').order_by('date').annotate(Sum('points'))
+            return Response(points)
+        return Response(status=404)
 
 
 class ProjectViewSet(viewsets.GenericViewSet,
