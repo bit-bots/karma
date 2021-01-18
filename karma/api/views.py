@@ -1,9 +1,11 @@
 from datetime import timedelta
 
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import Q, Sum
+from django.db.models import Q, Sum, F
+from django.db.models.functions import TruncDate
 from django.utils.timezone import now
 from rest_framework import mixins, viewsets
+from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.status import HTTP_400_BAD_REQUEST
 
@@ -17,7 +19,21 @@ class KarmaViewSet(viewsets.GenericViewSet,
     serializer_class = KarmaSerializer
 
     def get_queryset(self):
+        if 'project' in self.request.query_params:
+            try:
+                project = Project.objects.get(Q(name=self.request.query_params['project']) & (
+                        Q(user=self.request.user) | Q(group__in=self.request.user.groups.all())))
+            except ObjectDoesNotExist:
+                return None
+            return KarmaPoints.objects.filter(project=project)
         return KarmaPoints.objects.filter(Q(project__user=self.request.user) | Q(project__group__in=self.request.user.groups.all()))
+
+    @action(detail=False)
+    def by_day(self, request):
+        """Group information by day and user"""
+        queryset = self.get_queryset()
+        points = queryset.annotate(date=TruncDate('time'), username=F('user__username')).values('username', 'date').order_by('date').annotate(Sum('points'))
+        return Response(points)
 
 
 class ProjectViewSet(viewsets.GenericViewSet,
