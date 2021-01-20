@@ -61,6 +61,7 @@ parser_hs = subparsers.add_parser("highscore", help="get the highscore")
 parser_hs.add_argument("days", type=int, help="days of the highscore")
 parser_hs.add_argument("-p", "--project", nargs="?", default="", dest="project", help="which project's karma score",
                        required=False)
+parser_hs.add_argument("-s", "--sum", dest="sum", action="store_true")
 args = parser.parse_args()
 if not args.command:
     # Highscore of 14 days (used for weekly) is default action
@@ -244,6 +245,13 @@ elif args.command == "highscore":
                         headers={'Authorization': f"Token {config['token']}"},
                         params={"project": project, "days": args.days})
     resp_dict = resp.json()
+
     karma_sorted = [(k, resp_dict[k]) for k in sorted(resp_dict, key=resp_dict.get, reverse=True)]
-    for name, value in karma_sorted:
-        print("* " + name + " " * (15 - len(name) - len(str(value))) + str(value))
+    if args.sum:
+        s = 0
+        for _, v in karma_sorted:
+            s += v
+        print(f"{s:,} Karma was collected in the last {args.days} days")
+    else:
+        for name, value in karma_sorted:
+            print("* " + name + " " * (15 - len(name) - len(str(value))) + str(value))
