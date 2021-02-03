@@ -68,6 +68,7 @@ if not args.command:
     args.command = "highscore"
     args.days = 14
     args.project = ''
+    args.sum = False
 
 base_url = "https://karma.bit-bots.de/api/"
 
