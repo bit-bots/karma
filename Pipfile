@@ -4,7 +4,7 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-Django = "<3.1"
+Django = "<3.2"
 django-widget-tweaks = "<1.5"
 django-datetime-widget = "<0.10"
 djangorestframework = "<3.12"
