@@ -66,7 +66,11 @@ parser_hs.add_argument("-s", "--sum", dest="sum", action="store_true")
 args = parser.parse_args()
 
 if args.points:
-    args.points = int(numexpr.evaluate(args.points))
+    try:
+        args.points = int(numexpr.evaluate(args.points))
+    except: 
+        print(f"{COLORS.FAIL}Invalid math expression!{COLORS.ENDC}")
+        exit(1)
 
 if not args.command:
     # Highscore of 14 days (used for weekly) is default action
