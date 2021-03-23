@@ -7,6 +7,7 @@ import getpass
 import os
 import requests
 import numexpr
+from sys import exit
 
 
 class COLORS:
