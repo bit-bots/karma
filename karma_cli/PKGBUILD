@@ -1,6 +1,6 @@
 # Maintainer: ftsell <aur@finn-thorben.me>
 pkgname=bitbots-karma-cli-git
-pkgver=r67.2a00d7b
+pkgver=r93.9ac8e20
 pkgrel=1
 _gitname=karma
 _gitbranch=master
@@ -9,7 +9,7 @@ arch=(any)
 url="https://github.com/bit-bots/${_gitname}"
 license=("MIT")
 makedepends=("git")
-depends=("python" "python-yaml" "python-requests")
+depends=("python" "python-yaml" "python-requests" "python-numexpr")
 source=("${_gitname}::git+https://github.com/bit-bots/${_gitname}.git#branch=${_gitbranch}")
 sha256sums=("SKIP")
 
