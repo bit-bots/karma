@@ -6,6 +6,7 @@ import yaml
 import getpass
 import os
 import requests
+import numexpr
 
 
 class COLORS:
@@ -28,7 +29,7 @@ parser = argparse.ArgumentParser(description="Command Line Interface for 'Karma 
 subparsers = parser.add_subparsers(title="command", description="command which shall be performed", dest="command")
 
 parser_add = subparsers.add_parser("add", help="add karma to your account")
-parser_add.add_argument("points", type=int, help="number of karma points to add")
+parser_add.add_argument("points", type=str, help="number of karma points to add")
 parser_add.add_argument("-p", "--project", default="", dest="project", help="project to which karma is added",
                         required=False)
 parser_add.add_argument("-c", "--category", default="", dest="category", help="category to which karma is added",
@@ -63,6 +64,10 @@ parser_hs.add_argument("-p", "--project", nargs="?", default="", dest="project",
                        required=False)
 parser_hs.add_argument("-s", "--sum", dest="sum", action="store_true")
 args = parser.parse_args()
+
+if args.points:
+    args.points = int(numexpr.evaluate(args.points))
+
 if not args.command:
     # Highscore of 14 days (used for weekly) is default action
     args.command = "highscore"
