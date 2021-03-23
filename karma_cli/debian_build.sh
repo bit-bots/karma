@@ -1,5 +1,5 @@
 #!/bin/bash
-VERSION=1.0.2
+VERSION=1.1.0
 REVISION=1
 
 BUILD_DIR=$(mktemp -d)
@@ -16,7 +16,7 @@ Version: $VERSION-$REVISION
 Section: misc
 Priority: optional
 Architecture: all
-Depends: python3, python3-yaml, python3-requests
+Depends: python3, python3-yaml, python3-requests, python3-numexpr
 Maintainer: Timon Engelke <debian@timonengelke.de>
 Homepage: https://karma.bit-bots.de
 Vcs-Browser: https://github.com/bit-bots/karma
