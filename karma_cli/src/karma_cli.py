@@ -66,13 +66,6 @@ parser_hs.add_argument("-p", "--project", nargs="?", default="", dest="project",
 parser_hs.add_argument("-s", "--sum", dest="sum", action="store_true")
 args = parser.parse_args()
 
-if args.points:
-    try:
-        args.points = int(numexpr.evaluate(args.points))
-    except: 
-        print(f"{COLORS.FAIL}Invalid math expression!{COLORS.ENDC}")
-        exit(1)
-
 if not args.command:
     # Highscore of 14 days (used for weekly) is default action
     args.command = "highscore"
@@ -187,6 +180,12 @@ if args.command == "login":
         print(COLORS.FAIL + resp.text + COLORS.ENDC)
 
 elif args.command == "add":
+    try:
+        args.points = int(numexpr.evaluate(args.points))
+    except: 
+        print(f"{COLORS.FAIL}Invalid math expression!{COLORS.ENDC}")
+        exit(1)
+        
     projects_and_categories = get_available_projects_and_categories()
     projects = list(projects_and_categories.keys())
     project = check_projects_or_categories(args.project, projects, "project")
