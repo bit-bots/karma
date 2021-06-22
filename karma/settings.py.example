@@ -131,3 +131,5 @@ STATIC_URL = '/static/'
 ITEMS_PER_PAGE = 100
 
 CALIBRATION_PROJECT = 1
+
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
