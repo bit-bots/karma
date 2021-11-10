@@ -263,5 +263,7 @@ elif args.command == "highscore":
             s += v
         print(f"{s:,} Karma was collected in the last {args.days} days")
     else:
+        max_name = max(len(name) for name, value in karma_sorted)
+        max_value = max(len(str(value)) for name, value in karma_sorted)
         for name, value in karma_sorted:
-            print("* " + name + " " * (15 - len(name) - len(str(value))) + str(value))
+            print("* " + name + " " * (max_name + max_value + 1 - len(name) - len(str(value))) + str(value))

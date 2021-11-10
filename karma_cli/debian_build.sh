@@ -1,5 +1,5 @@
 #!/bin/bash
-VERSION=1.1.1
+VERSION=1.1.2
 REVISION=1
 
 BUILD_DIR=$(mktemp -d)
