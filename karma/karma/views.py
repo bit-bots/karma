@@ -154,33 +154,14 @@ def api_project_activity_points(request, project_id):
 
     userpoints_week = KarmaPoints.objects.\
         filter(project=project, time__gte=now()-timedelta(days=7)).\
-        values('user__username').\
-        annotate(points=Sum('points'))
-    userpoints_day = KarmaPoints.objects.\
-        filter(project=project, time__gte=now()-timedelta(days=1)).\
-        values('user__username').\
-        annotate(points=Sum('points'))
+        aggregate(Sum('points'))
 
-    activepoints_list = dict()
+    # Full karma is a full work week of one person
+    activepoints = userpoints_week / 2400
 
-    # Add week points and points of last day to weight the last day more
-    for userp in userpoints_week:
-        username = userp["user__username"]
-        activepoints_list[username] = userp["points"]
+    # Scale (9000 = karma bar is full)
+    activepoints *= 9000
 
-    for userp in userpoints_day:
-        username = userp["user__username"]
-        activepoints_list[username] += userp["points"]
-
-    activepoints = 0
-    for username, points in activepoints_list.items():
-        # Take logarithm of karma points to count more karma less
-        log_points = math.log(points)
-        # Take square root to weight persons stronger than points
-        activepoints += math.sqrt(log_points)
-
-    # Scale
-    activepoints *= 200
     # Return integer
     activepoints = int(activepoints)
     return TemplateResponse(request, 'karma/api_project_active', {
