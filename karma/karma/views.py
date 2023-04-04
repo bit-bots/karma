@@ -154,7 +154,7 @@ def api_project_activity_points(request, project_id):
 
     userpoints_week = KarmaPoints.objects.\
         filter(project=project, time__gte=now()-timedelta(days=7)).\
-        aggregate(Sum('points'))
+        aggregate(week_sum=Sum('points'))['week_sum']
 
     # Full karma is a full work week of one person
     activepoints = userpoints_week / 2400
