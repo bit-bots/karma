@@ -159,8 +159,8 @@ def api_project_activity_points(request, project_id):
     # Full karma is a full work week of one person
     activepoints = userpoints_week / 2400
 
-    # Scale (9000 = karma bar is full)
-    activepoints *= 9000
+    # Scale (8000 = karma bar is full)
+    activepoints *= 8000
 
     # Return integer
     activepoints = int(activepoints)
