@@ -9,7 +9,7 @@ cd $BUILD_DIR
 git clone https://github.com/bit-bots/karma
 mkdir -p $PACKAGE_DIR/usr/bin
 cp karma/karma_cli/src/karma_cli.py $PACKAGE_DIR/usr/bin/karma
-mkdir $PACKAGE_DIR/DEBIAN
+mkdir -m 755 $PACKAGE_DIR/DEBIAN
 cat > $PACKAGE_DIR/DEBIAN/control << EOF
 Package: karma-cli
 Version: $VERSION-$REVISION
