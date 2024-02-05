@@ -25,7 +25,7 @@
                     {% if request.user.is_anonymous %}
                         <a href="{% url 'login' %}"><i class="btn btn-primary">Login</i></a>
                     {% else %}
-                    <a href=""><i class="fa fa-user"></i><span>{{ request.user.get_username }}</span></a> (<a href="/logout">Logout</a>)
+                    <a href=""><i class="fa fa-user"></i><span>{{ request.user.get_username }}</span></a> (<a href="{% url 'simple_openid_connect:logout' %}">Logout</a>)
                     {% endif %}
             </div></div>
         </nav>
