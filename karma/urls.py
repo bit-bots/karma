@@ -10,7 +10,5 @@ urlpatterns = [
     path('', lambda req: redirect('karma_index'), name='index'),
     path('api/', include('karma.api.urls')),
     path('calibration/', include('karma.calibration.urls')),
-    path('login/', auth_views.LoginView.as_view(), name='login'),
-    path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     path("auth/openid/", include("simple_openid_connect.integrations.django.urls")),
 ]
