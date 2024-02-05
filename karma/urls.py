@@ -27,4 +27,5 @@ urlpatterns = [
     path('calibration/', include('karma.calibration.urls')),
     url(r'^login/$', auth_views.LoginView.as_view(), name='login'),
     url(r'^logout/$', auth_views.LogoutView.as_view(), name='logout'),
+    path("auth/openid/", include("simple_openid_connect.integrations.django.urls")),
 ]

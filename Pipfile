@@ -8,6 +8,7 @@ Django = "<3.3"
 django-widget-tweaks = "<1.5"
 django-datetime-widget = "<0.10"
 djangorestframework = "<3.13"
+simple-openid-connect = "<0.6"
 
 [dev-packages]
 
