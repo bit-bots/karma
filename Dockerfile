@@ -1,14 +1,13 @@
-FROM debian:buster
+FROM debian:bookworm-slim
 
 RUN apt update
-RUN apt -y --no-install-recommends install g++ uwsgi uwsgi-plugin-python3 python3 python3-pip virtualenv make python3-psycopg2 python3-ldap3 gettext gcc python3-dev libldap2-dev libsasl2-dev
+RUN apt -y --no-install-recommends install g++ uwsgi uwsgi-plugin-python3 python3 python3-pip virtualenv make python3-psycopg2 python3-ldap3 gettext gcc python3-dev libldap2-dev libsasl2-dev python3-virtualenv pipenv
 
 RUN usermod -u 2012 -g 33 -d /opt/karma www-data
 
 WORKDIR /opt/karma
 ADD . /opt/karma
 
-RUN pip3 install pipenv
 ENV PIPENV_VENV_IN_PROJECT=1
 RUN pipenv sync
 RUN pipenv install psycopg2-binary django-ldapdb django-auth-ldap uwsgi requests sentry-sdk coreapi
