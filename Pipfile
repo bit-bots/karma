@@ -4,10 +4,10 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-Django = "<3.3"
+Django = "<5.1"
 django-widget-tweaks = "<1.5"
 django-datetime-widget = "<0.10"
-djangorestframework = "<3.13"
+djangorestframework = "<3.15"
 simple-openid-connect = "<0.6"
 
 [dev-packages]
