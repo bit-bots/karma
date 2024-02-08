@@ -4,11 +4,11 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-Django = "<5.1"
-django-widget-tweaks = "<1.5"
-django-datetime-widget = "<0.10"
-djangorestframework = "<3.15"
-simple-openid-connect = { version = "<0.6", extras = ["django"] }
+Django = "~=5.0"
+django-widget-tweaks = "~=1.4"
+django-datetime-widget = "~=0.9"
+djangorestframework = "~=3.14"
+simple-openid-connect = { version = "~=1.0", extras = ["django"] }
 
 [dev-packages]
 
