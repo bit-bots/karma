@@ -56,6 +56,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'simple_openid_connect.integrations.django.middleware.TokenVerificationMiddleware',
 ]
 
 ROOT_URLCONF = 'karma.urls'
@@ -138,5 +139,5 @@ OPENID_ISSUER = "https://identity.mafiasi.de/realms/mafiasi"
 OPENID_CLIENT_ID = "karma"
 OPENID_BASE_URI = "https://karma.bit-bots.de"
 OPENID_CLIENT_SECRET = "..."
-OPENID_SCOPE = ["openid", "profile"]
-OPENID_USER_MAPPER = "karma.karma.openid:KarmaUserMapper"
+OPENID_SCOPE = "openid profile"
+OPENID_USER_MAPPER = "karma.karma.openid.KarmaUserMapper"
