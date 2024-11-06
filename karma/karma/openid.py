@@ -1,4 +1,5 @@
 from django.contrib.auth import get_user_model
+from django.contrib.auth.models import Group
 from simple_openid_connect.integrations.django.models import OpenidUser
 from simple_openid_connect.integrations.django.user_mapping import UserMapper
 
