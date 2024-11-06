@@ -20,3 +20,10 @@ class KarmaUserMapper(UserMapper):
             pass
         return super().handle_federated_userinfo(user_data)
 
+    def automap_user_attrs(self, user, user_data):
+        super().automap_user_attrs(user, user_data)
+        groups = getattr(user_data, "groups", [])
+        for group_name in groups:
+            group = Group.objects.get_or_create(name=group_name)[0]
+            group.user_set.add(user)
+            group.save()
