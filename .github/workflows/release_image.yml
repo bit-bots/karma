@@ -4,23 +4,28 @@ on:
     branches: [ main ]
 
 env:
-  PKGBUILD: ../../karma_cli/PKGBUILD
-  DEBIAN_BUILD: ../../karma_cli/debian_build.sh
+  DEBIAN_BUILD: karma_cli/debian_build.sh
 
 jobs:
   build-and-release:
-    runs-on: ubuntu-24
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
       - uses: actions/checkout@v6
 
-      - name: Build package
-        id: makepkg
-        run: DEBIAN_BUILD
+      - name: Install build deps
+        run: |
+          sudo apt-get update 
+          sudo apt-get install -y git dpkg-dev fakeroot
 
-      - name: Release package
+      - name: Show produced files
+        run: ls -la
+
+      - name: Create GitHub Release and upload artifact
         uses: softprops/action-gh-release@v2
-        with: 
-          files:
-            karma-cli_*.deb
-
+        with:
+          files: |
+            ./karma-cli_*.deb
+          tag_name: release-${{ github.run_number }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
