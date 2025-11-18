@@ -1,0 +1,26 @@
+name: Release karma_cli
+on:
+  push:
+    branches: [ main ]
+
+env:
+  PKGBUILD: ../../karma_cli/PKGBUILD
+  DEBIAN_BUILD: ../../karma_cli/debian_build.sh
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-24
+    steps:
+      - name: Checkout Repository
+      - uses: actions/checkout@v6
+
+      - name: Build package
+        id: makepkg
+        run: DEBIAN_BUILD
+
+      - name: Release package
+        uses: softprops/action-gh-release@v2
+        with: 
+          files:
+            karma-cli_*.deb
+
