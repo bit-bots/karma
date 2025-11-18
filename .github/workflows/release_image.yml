@@ -1,0 +1,31 @@
+name: Release karma_cli
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Install build deps
+        run: |
+          sudo apt-get update 
+          sudo apt-get install -y git dpkg-dev fakeroot
+
+      - name: Run debian build script
+        run: bash karma_cli/debian_build.sh
+
+      - name: Show produced files
+        run: ls -la
+
+      - name: Create GitHub Release and upload artifact
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            ./karma-cli_*.deb
+          tag_name: release-karma-cli
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
