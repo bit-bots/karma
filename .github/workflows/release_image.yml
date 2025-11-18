@@ -3,9 +3,6 @@ on:
   push:
     branches: [ release ]
 
-env:
-  DEBIAN_BUILD: karma_cli/debian_build.sh
-
 jobs:
   build-and-release:
     runs-on: ubuntu-latest
@@ -17,6 +14,9 @@ jobs:
         run: |
           sudo apt-get update 
           sudo apt-get install -y git dpkg-dev fakeroot
+
+      - name: Run debian build script
+        run: bash karma_cli/debian_build.sh
 
       - name: Show produced files
         run: ls -la
