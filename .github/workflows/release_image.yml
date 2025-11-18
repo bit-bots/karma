@@ -1,7 +1,7 @@
 name: Release karma_cli
 on:
   push:
-    branches: [ main ]
+    branches: [ release ]
 
 env:
   DEBIAN_BUILD: karma_cli/debian_build.sh
