@@ -1,7 +1,7 @@
 name: Release karma_cli
 on:
   push:
-    branches: [ release ]
+    branches: [ main ]
 
 jobs:
   build-and-release:
@@ -26,6 +26,6 @@ jobs:
         with:
           files: |
             ./karma-cli_*.deb
-          tag_name: release-${{ github.run_number }}
+          tag_name: release-karma-cli
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
