@@ -1,0 +1,23 @@
+[project]
+name = "karma"
+version = "0.0.0"
+description = "A simple time tracking system"
+requires-python = ">=3.10"
+dependencies = [
+    "django~=5.0",
+    "django-datetime-widget~=0.9",
+    "django-widget-tweaks~=1.4",
+    "djangorestframework~=3.14",
+    "requests~=2.31",
+    "simple-openid-connect[django]~=1.0",
+]
+
+[build-system]
+requires = ["uv_build>=0.13.9,<0.14"]
+build-backend = "uv_build"
+
+[tool.uv.build-backend]
+module-root = ""
+module-name = "karma"
+# Deployment settings can contain credentials and must not enter distributions.
+source-exclude = ["karma/settings.py"]
