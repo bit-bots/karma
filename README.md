@@ -12,7 +12,7 @@ Karma is a simple time tracking system.
 ## Installation
 
 Install [uv](https://docs.astral.sh/uv/getting-started/installation/) to manage Python
-and the project virtual environment. The checked-in `.python-version` selects Python 3.11.
+and the project virtual environment. The checked-in `.python-version` selects Python 3.12.
 Install the locked dependencies with
 
 ```
@@ -41,13 +41,19 @@ The following settings should probably be changed:
 + The database settings
 
 For instructions on how to use other databases than sqlite, have a look at the [Django
-Documentation](https://docs.djangoproject.com/en/3.0/ref/settings/#std:setting-DATABASES).
+Documentation](https://docs.djangoproject.com/en/6.1/ref/settings/#std:setting-DATABASES).
 
 To initialize the database, run `uv run --locked ./manage.py migrate`
 
 To create an administrator user, run `uv run --locked ./manage.py createsuperuser`.
 
 `uv run --locked ./manage.py runserver` starts the server with the configuration given in the settings.py file.
+
+Run the application tests with an isolated SQLite database:
+
+```sh
+uv run --locked ./manage.py test karma.karma --settings=karma.test_settings
+```
 
 On the website, you can use the *Add Project* or *Add Category* buttons to add projects and
 categories.
