@@ -1,0 +1,12 @@
+.git
+.agents
+.codex
+.aws
+.venv
+**/__pycache__
+**/*.py[cod]
+karma/settings.py
+*.sqlite3
+*.sqlite3-*
+dist
+build

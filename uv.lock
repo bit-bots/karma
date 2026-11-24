@@ -511,6 +511,11 @@ dependencies = [
     { name = "simple-openid-connect", extra = ["django"] },
 ]
 
+[package.dev-dependencies]
+docker = [
+    { name = "uwsgi" },
+]
+
 [package.metadata]
 requires-dist = [
     { name = "django", specifier = "~=5.0" },
@@ -520,6 +525,9 @@ requires-dist = [
     { name = "requests", specifier = "~=2.31" },
     { name = "simple-openid-connect", extras = ["django"], specifier = "~=1.0" },
 ]
+
+[package.metadata.requires-dev]
+docker = [{ name = "uwsgi", specifier = ">=2.0,<3" }]
 
 [[package]]
 name = "orderedmultidict"
@@ -822,3 +830,9 @@ sdist = { url = "https://files.pythonhosted.org/packages/e3/05/b17359e1cefb4f909
 wheels = [
     { url = "https://files.pythonhosted.org/packages/92/9d/c4e665119135114480843e7ab388fa94d8480650450e6f8e26b70d323a4c/urllib3-2.8.0-py3-none-any.whl", hash = "sha256:0cf3cae568d36aa9576b28dfb35f11328f1cb974ca7647d9475ebb86c75ac6e3", size = 135717, upload-time = "2026-09-15T19:29:34.577Z" },
 ]
+
+[[package]]
+name = "uwsgi"
+version = "2.0.31"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/9f/49/2f57640e889ba509fd1fae10cccec1b58972a07c2724486efba94c5ea448/uwsgi-2.0.31.tar.gz", hash = "sha256:e8f8b350ccc106ff93a65247b9136f529c14bf96b936ac5b264c6ff9d0c76257", size = 822796, upload-time = "2025-10-11T19:17:28.794Z" }

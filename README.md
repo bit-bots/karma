@@ -62,5 +62,32 @@ look at [their GitHub page](https://github.com/django-auth-ldap/django-auth-ldap
 For **production** systems it is necessary to additionally run the command `uv run --locked ./manage.py
 collectstatic`. For production, we recommend to use uwsgi.
 
-Our uwsgi configuration and a **Dockerfile** can be found at
-https://github.com/fsinfuhh/dockerfiles/tree/master/karma.
+## Docker
+
+Build the image with:
+
+```sh
+docker build -t karma .
+```
+
+Create a configuration directory containing your customized `settings.py`. For
+container deployments, set `STATIC_ROOT = '/opt/static'` and use `/opt/storage`
+for persistent database files (for example, `/opt/storage/db.sqlite3` for SQLite).
+Configure `ALLOWED_HOSTS`, the secret key, and OpenID settings for your deployment.
+
+```sh
+docker run --rm --name karma \
+  --mount type=bind,src=/absolute/path/to/config,dst=/opt/config,readonly \
+  --mount type=volume,src=karma-static,dst=/opt/static \
+  --mount type=volume,src=karma-storage,dst=/opt/storage \
+  -p 3005:3005 karma
+```
+
+The container runs as UID 33 and GID 33. Mounted configuration must be readable
+by this user; storage and static directories must be writable. Startup applies
+migrations and collects static files before starting uWSGI on port 3005, using
+the uWSGI protocol. Configure a reverse proxy with uWSGI support in front of it.
+
+The `docker` dependency group contains uWSGI and is installed during the image
+build. Add any drivers or integrations required by your deployment settings to
+the project dependencies and update `uv.lock` before building the image.
