@@ -1,6 +1,8 @@
 #!/bin/sh
-export USER=www-data HOME=/home/www-data
+set -eu
+
+export USER=www-data HOME=/opt/karma
 cd /opt/karma
-pipenv run ./manage.py migrate
-pipenv run ./manage.py collectstatic --noinput
-exec pipenv run uwsgi /etc/uwsgi/karma.ini
+python manage.py migrate --noinput
+python manage.py collectstatic --noinput
+exec uwsgi --ini /etc/uwsgi/karma.ini

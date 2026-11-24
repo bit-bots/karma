@@ -1,27 +1,45 @@
-FROM debian:bookworm-slim
+FROM ghcr.io/astral-sh/uv:python3.14-trixie-slim AS base
 
-RUN apt update
-RUN apt -y --no-install-recommends install g++ uwsgi uwsgi-plugin-python3 python3 python3-pip virtualenv make python3-psycopg2 python3-ldap3 gettext gcc python3-dev libldap2-dev libsasl2-dev python3-virtualenv pipenv
-
-RUN usermod -u 2012 -g 33 -d /opt/karma www-data
+ENV UV_PYTHON_DOWNLOADS=never \
+    UV_LINK_MODE=copy \
+    PATH="/opt/karma/.venv/bin:$PATH" \
+    PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1
 
 WORKDIR /opt/karma
-ADD . /opt/karma
 
-ENV PIPENV_VENV_IN_PROJECT=1
-RUN pipenv sync
-RUN pipenv install psycopg2-binary django-ldapdb django-auth-ldap uwsgi requests sentry-sdk coreapi
+FROM base AS builder
 
-RUN ln -sf /opt/config/settings.py /opt/karma/karma/settings.py
-RUN ln -sf /opt/static/ /opt/karma/_static
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends build-essential libpcre2-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY pyproject.toml uv.lock .python-version ./
+# The application runs from /opt/karma; only its dependencies are installed here.
+RUN uv sync --locked --group docker --no-install-project --compile-bytecode
+
+FROM base AS runtime
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends gettext libpcre2-8-0 \
+    && rm -rf /var/lib/apt/lists/* \
+    && usermod -u 33 -g 33 -d /opt/karma www-data \
+    && mkdir -p /opt/config /opt/static /opt/storage \
+    && chown www-data:www-data /opt/static /opt/storage
+
+COPY --from=builder /opt/karma/.venv /opt/karma/.venv
+COPY karma ./karma
+COPY manage.py ./manage.py
+
+RUN python -m compileall -q /opt/karma/karma /opt/karma/manage.py \
+    && ln -sf /opt/config/settings.py /opt/karma/karma/settings.py \
+    && ln -sf /opt/static /opt/karma/_static
 
 COPY docker/uwsgi-karma.ini /etc/uwsgi/karma.ini
-COPY docker/run /usr/local/bin/run
+COPY --chmod=755 docker/run /usr/local/bin/run
 
-VOLUME /opt/static
-VOLUME /opt/config
-VOLUME /opt/storage
+VOLUME ["/opt/static", "/opt/config", "/opt/storage"]
 
 USER www-data:www-data
 
-ENTRYPOINT /usr/local/bin/run
+ENTRYPOINT ["/usr/local/bin/run"]
