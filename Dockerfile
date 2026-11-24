@@ -1,4 +1,4 @@
-FROM ghcr.io/astral-sh/uv:python3.12-trixie-slim AS base
+FROM ghcr.io/astral-sh/uv:python3.14-trixie-slim AS base
 
 ENV UV_PYTHON_DOWNLOADS=never \
     UV_LINK_MODE=copy \

@@ -12,7 +12,7 @@ Karma is a simple time tracking system.
 ## Installation
 
 Install [uv](https://docs.astral.sh/uv/getting-started/installation/) to manage Python
-and the project virtual environment. The checked-in `.python-version` selects Python 3.12.
+and the project virtual environment. The checked-in `.python-version` selects Python 3.14.
 Install the locked dependencies with
 
 ```
